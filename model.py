@@ -1,22 +1,32 @@
 import mesa
 import mesa_geo as mg
 from shapely.geometry import Point
+from agents import Resident
+from space import StudyArea
 
 
 class EvacuationModel(mesa.Model):
+
+    # The shapefile path
+    population_distribution_shp = "data/population_distribution.shp"
+
     def __init__(self, num_steps=30):
         super().__init__()
-        self.space = mg.GeoSpace(warn_crs_conversion=False)
+        self.space = StudyArea(crs="EPSG:4326",warn_crs_conversion=True)
         self.steps = 0
         self.running = True
-        
 
         # Model parameters
         self.num_steps = num_steps
 
         # Create agents
-        test_agent = mg.GeoAgent(self, Point(-116.1479, 43.59), crs="EPSG:4326" )
-        self.space.add_agents([test_agent])
+        resident_ag_creator = mg.AgentCreator(Resident, model=self)
+        resident_agents = resident_ag_creator.from_file(self.population_distribution_shp)
+        self.space.add_agents(resident_agents)
+        
+        # Create a single agent
+        # resident_agent = Resident(self, Point(-116.1264, 43.5984), crs="EPSG:4326" )
+        # self.space.add_agents(resident_agent)
 
         # Data collector
         self.datacollector = mesa.DataCollector(
@@ -27,9 +37,11 @@ class EvacuationModel(mesa.Model):
         self.datacollector.collect(self)
 
     def step(self):
+
+        self.agents_by_type[Resident].do("step")
+
         self.datacollector.collect(self)
-        if self.steps < self.num_steps:
-            self.steps += 1
+        if self.steps <= self.num_steps:
             print("Step: ", self.steps)
         else:
             self.running = False

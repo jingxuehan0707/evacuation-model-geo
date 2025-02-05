@@ -8,7 +8,12 @@ model_params = {
 }
 
 def draw_agents(agent):
-    return {"Shape": "circle", "r": 2, "Color": "red"}
+    portrayal = {
+        "color": "Green",
+        "weight": 1,
+        # "radius": 1
+    }
+    return portrayal
 
 model = EvacuationModel()
 page = SolaraViz(
@@ -16,8 +21,9 @@ page = SolaraViz(
     [
         make_geospace_component(
             draw_agents,
-            zoom=14,
-            layout=Layout(width="800px", height="600px"),
+            tiles=None,
+            zoom=12,
+            # layout=Layout(width="800px", height="100%"),
         ),
         # make_plot_component("steps"),
     ],
