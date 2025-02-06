@@ -4,6 +4,7 @@ from shapely.geometry import LineString
 from scipy.spatial import KDTree
 import pickle
 import os
+import matplotlib.pyplot as plt
 
 class RoadNetwork:
     def __init__(self, geo_series: gpd.GeoSeries = None, cache_dir="cache"):
@@ -59,14 +60,38 @@ class RoadNetwork:
         with open(os.path.join(self.cache_dir, 'kdtree.pkl'), 'rb') as f:
             self.kdtree = pickle.load(f)
 
-# Example usage:
-geo_series = gpd.GeoSeries([LineString([(0, 0), (1, 1), (2, 2)]), LineString([(2, 2), (3, 3)])])
-road_network = RoadNetwork(geo_series)
-shortest_path = road_network.get_shortest_path((0.5, 0.5), (3, 3))
-print(shortest_path)
+def example():
+    # Example usage:
+    geo_series = gpd.GeoSeries([LineString([(0, 0), (1, 1), (2, 2)]), LineString([(2, 2), (3, 3)])])
+    road_network = RoadNetwork(geo_series)
+    shortest_path = road_network.get_shortest_path((0.5, 0.5), (3, 3))
+    print(shortest_path)
 
-# Loading from cache
-road_network_cached = RoadNetwork()
-road_network_cached.load_from_cache()
-shortest_path_cached = road_network_cached.get_shortest_path((0.5, 0.5), (3, 3))
-print(shortest_path_cached)
+    # Loading from cache
+    road_network_cached = RoadNetwork()
+    road_network_cached.load_from_cache()
+    shortest_path_cached = road_network_cached.get_shortest_path((0.5, 0.5), (3, 3))
+    print(shortest_path_cached)
+
+def demo():
+    # Demo usage using shapefile
+    geo_series = gpd.read_file('data/gcs/road_network.shp')['geometry']
+    road_network = RoadNetwork(geo_series)
+    start_point = (-116.1264, 43.5984)
+    end_point = (-116.1364, 43.5984)
+    shortest_path = road_network.get_shortest_path(start_point, end_point)
+
+    # Create a LineString from shortest_path
+    shortest_path_line = LineString(shortest_path)
+    
+    # Plot the shortest path on the map
+    fig, ax = plt.subplots()
+    geo_series.plot(ax=ax)
+    ax.plot(*shortest_path_line.xy, color='red')
+    ax.scatter(*start_point, color='green')
+    ax.scatter(*end_point, color='blue')
+    plt.show()
+
+if __name__ == "__main__":
+    # example()
+    demo()
