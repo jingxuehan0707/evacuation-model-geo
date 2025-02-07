@@ -1,18 +1,22 @@
 import mesa
 import mesa_geo as mg
 from shapely.geometry import Point
+import geopandas as gpd
 from agents import Resident
+from road_network import RoadNetwork
 from space import StudyArea
 
 
 class EvacuationModel(mesa.Model):
 
     # The shapefile path
-    population_distribution_shp = "data/population_distribution.shp"
+    population_distribution_shp = "data/gcs/population_distribution.shp"
+    road_network_shp = "data/gcs/road_network.shp"
 
     def __init__(self, num_steps=30):
         super().__init__()
         self.space = StudyArea(crs="EPSG:4326",warn_crs_conversion=True)
+        self.road_network = RoadNetwork(geo_series=gpd.read_file(self.road_network_shp)['geometry'])
         self.steps = 0
         self.running = True
 

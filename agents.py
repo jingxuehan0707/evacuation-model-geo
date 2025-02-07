@@ -1,27 +1,34 @@
 import mesa_geo as mg
 from pyproj import Transformer
 from shapely.geometry import Point, LineString
+from road_network import RoadNetwork
+import networkx as nx
+import geopandas as gpd
 
 class Resident(mg.GeoAgent):
 
     def __init__(self, model, geometry, crs):
         super().__init__(model, geometry, crs)
+        self.origin = self.model.road_network.snap_to_network((self.geometry.x, self.geometry.y))
+        self.destination = (-116.15188, 43.57599)  # A test shelter location
+        self.path = []
+        self.path_index = 0
 
-        # Test destination to move
-        # transformer = Transformer.from_crs("EPSG:4326", self.crs)
-        self.destination = Point(-116.1479, 43.59)
-        # self.destination = transformer.transform(self.destination.x, self.destination.y)
-        self.od_line = LineString([self.geometry, self.destination])
+        self._calculate_path()
+
+    def _calculate_path(self):
+        try:
+            self.path = self.model.road_network.get_shortest_path((self.geometry.x, self.geometry.y), self.destination)
+            self.path_index = 0
+        except nx.NetworkXNoPath:
+            # Do nothing if the node is not reachable
+            self.path = []
+            self.path_index = 0
 
     def step(self):
-        # Percentage of distance to move
-        percentage = self.model.steps / self.model.num_steps
-        # print("Percentage: ", percentage)
-
-        # Interpolate the point to move
-        new_position = self.od_line.interpolate(percentage, normalized=True)
-        self.geometry = new_position
-        # print("Geometry: ", self.geometry)
-        # print("crs: ", self.crs)
-
-        # print("Resident stepped")
+        if self.path_index < len(self.path):
+            next_point = self.path[self.path_index]
+            self.geometry = Point(next_point)
+            self.path_index += 1
+        else:
+            print("Reached destination")
