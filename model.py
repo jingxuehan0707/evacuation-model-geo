@@ -13,7 +13,7 @@ class EvacuationModel(mesa.Model):
     population_distribution_shp = "data/gcs/population_distribution.shp"
     road_network_shp = "data/gcs/road_network.shp"
 
-    def __init__(self, num_steps=30):
+    def __init__(self, num_steps=100):
         super().__init__()
         self.space = StudyArea(crs="EPSG:4326",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=gpd.read_file(self.road_network_shp)['geometry'])
@@ -26,7 +26,7 @@ class EvacuationModel(mesa.Model):
         # Create agents
         resident_ag_creator = mg.AgentCreator(Resident, model=self)
         resident_agents = resident_ag_creator.from_file(self.population_distribution_shp)
-        self.space.add_agents(resident_agents)
+        self.space.add_agents(resident_agents[2:100])
         
         # Create a single agent
         # resident_agent = Resident(self, Point(-116.1264, 43.5984), crs="EPSG:4326" )

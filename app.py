@@ -4,7 +4,7 @@ from model import EvacuationModel
 from ipywidgets import Layout
 
 model_params = {
-    "num_steps": Slider("Number of steps", 30, 10, 50, 1),
+    "num_steps": Slider("Number of steps", 30, 10, 100, 1),
 }
 
 def draw_agents(agent):
@@ -21,7 +21,6 @@ page = SolaraViz(
     [
         make_geospace_component(
             draw_agents,
-            tiles=None,
             zoom=12,
             # layout=Layout(width="800px", height="100%"),
         ),

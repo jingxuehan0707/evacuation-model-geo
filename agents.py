@@ -30,5 +30,3 @@ class Resident(mg.GeoAgent):
             next_point = self.path[self.path_index]
             self.geometry = Point(next_point)
             self.path_index += 1
-        else:
-            print("Reached destination")
