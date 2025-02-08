@@ -81,10 +81,10 @@ class RoadNetwork:
             return path
         except nx.NetworkXNoPath as e:
             logging.warning(f"No path found from {start_point} to {end_point}: {e}")
-            return None
+            return []
         except Exception as e:
             logging.warning(f"An error occurred while calculating the shortest path: {e}")
-            return None
+            return []
 
     def save_to_cache(self):
         os.makedirs(self.cache_dir, exist_ok=True)

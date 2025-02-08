@@ -26,7 +26,7 @@ class EvacuationModel(mesa.Model):
         # Create agents
         resident_ag_creator = mg.AgentCreator(Resident, model=self)
         resident_agents = resident_ag_creator.from_file(self.population_distribution_shp)
-        self.space.add_agents(resident_agents[2:100])
+        self.space.add_agents(resident_agents)
         
         # Create a single agent
         # resident_agent = Resident(self, Point(-116.1264, 43.5984), crs="EPSG:4326" )
@@ -49,3 +49,11 @@ class EvacuationModel(mesa.Model):
             print("Step: ", self.steps)
         else:
             self.running = False
+
+def demo():
+    model = EvacuationModel()
+    for i in range(100):
+        model.step()
+
+if __name__ == "__main__":
+    demo()

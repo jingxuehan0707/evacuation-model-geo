@@ -17,13 +17,10 @@ class Resident(mg.GeoAgent):
         self._calculate_path()
 
     def _calculate_path(self):
-        try:
-            self.path = self.model.road_network.get_shortest_path((self.geometry.x, self.geometry.y), self.destination)
-            self.path_index = 0
-        except nx.NetworkXNoPath:
-            # Do nothing if the node is not reachable
-            self.path = []
-            self.path_index = 0
+
+        self.path = self.model.road_network.get_shortest_path((self.geometry.x, self.geometry.y), self.destination)
+        self.path_index = 0
+
 
     def step(self):
         if self.path_index < len(self.path):
