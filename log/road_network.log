@@ -1,0 +1,256 @@
+2025-02-08 12:57:33,477 - WARNING - No path found from (-116.17619380030362, 43.60007049985376) to (-116.15225829998053, 43.57576880009009): Node (-116.15225829998053, 43.57576880009009) not reachable from (-116.17619380030362, 43.60007049985376)
+2025-02-08 12:57:33,478 - WARNING - No path found from (-116.17619380030362, 43.60007049985376) to (-116.17626649969918, 43.597989299566564): Node (-116.17626649969918, 43.597989299566564) not reachable from (-116.17619380030362, 43.60007049985376)
+2025-02-08 12:57:33,480 - WARNING - No path found from (-116.17619380030362, 43.60007049985376) to (-116.16097470012227, 43.59438450024453): Node (-116.16097470012227, 43.59438450024453) not reachable from (-116.17619380030362, 43.60007049985376)
+2025-02-08 12:57:33,481 - WARNING - No path found from (-116.17619380030362, 43.60007049985376) to (-116.12991139989117, 43.6087613997189): Node (-116.12991139989117, 43.6087613997189) not reachable from (-116.17619380030362, 43.60007049985376)
+2025-02-08 12:58:06,480 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.15225829998053, 43.57576880009009): Node (-116.15225829998053, 43.57576880009009) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 12:58:06,494 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.17626649969918, 43.597989299566564): Node (-116.17626649969918, 43.597989299566564) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 12:58:06,508 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.16097470012227, 43.59438450024453): Node (-116.16097470012227, 43.59438450024453) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 12:58:06,523 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.12991139989117, 43.6087613997189): Node (-116.12991139989117, 43.6087613997189) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 12:58:06,768 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.15225829998053, 43.57576880009009): Node (-116.15225829998053, 43.57576880009009) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 12:58:06,783 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.17626649969918, 43.597989299566564): Node (-116.17626649969918, 43.597989299566564) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 12:58:06,798 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.16097470012227, 43.59438450024453): Node (-116.16097470012227, 43.59438450024453) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 12:58:06,813 - WARNING - No path found from (-116.12374200029302, 43.57193500010021) to (-116.12991139989117, 43.6087613997189): Node (-116.12991139989117, 43.6087613997189) not reachable from (-116.12374200029302, 43.57193500010021)
+2025-02-08 13:00:55,071 - WARNING - No path found from (-116.14996759992476, 43.60617669959504) to (-116.15225829998053, 43.57576880009009): Node (-116.15225829998053, 43.57576880009009) not reachable from (-116.14996759992476, 43.60617669959504)
+2025-02-08 13:00:55,102 - WARNING - No path found from (-116.14996759992476, 43.60617669959504) to (-116.17626649969918, 43.597989299566564): Node (-116.17626649969918, 43.597989299566564) not reachable from (-116.14996759992476, 43.60617669959504)
+2025-02-08 13:00:55,132 - WARNING - No path found from (-116.14996759992476, 43.60617669959504) to (-116.16097470012227, 43.59438450024453): Node (-116.16097470012227, 43.59438450024453) not reachable from (-116.14996759992476, 43.60617669959504)
+2025-02-08 13:00:55,163 - WARNING - No path found from (-116.14996759992476, 43.60617669959504) to (-116.12991139989117, 43.6087613997189): Node (-116.12991139989117, 43.6087613997189) not reachable from (-116.14996759992476, 43.60617669959504)
+2025-02-08 13:18:38,725 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,737 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,744 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,781 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,808 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,834 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,846 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,862 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,889 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,916 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,930 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,937 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,941 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,954 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:38,969 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,008 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,012 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,025 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,041 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,080 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,128 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,156 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,168 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,180 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,185 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,201 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,219 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,255 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,281 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,307 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,317 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,337 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,363 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,389 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,400 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,418 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,421 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,422 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,426 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:18:39,461 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,111 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,126 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,143 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,182 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,208 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,234 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,244 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,267 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,271 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,285 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,301 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,338 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,347 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,364 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,366 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,390 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,395 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,409 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,425 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,464 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,469 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,484 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,503 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,542 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,547 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,557 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,564 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,601 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,605 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,617 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,632 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,688 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,692 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,702 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,709 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,746 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,752 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,763 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,770 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:07,805 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:21,935 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:21,962 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:21,975 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:21,991 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,002 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,022 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,024 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,045 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,049 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,062 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,077 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,115 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,119 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,127 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,133 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,170 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,174 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,186 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,200 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,238 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,241 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,251 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,266 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,327 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,332 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,349 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,369 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,406 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,411 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,425 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,442 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,479 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,483 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,499 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,518 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,554 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,561 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,572 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,578 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:22,613 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,212 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,225 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,227 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,252 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,257 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,269 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,271 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,296 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,301 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,308 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,313 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,347 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,352 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,361 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,368 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,404 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,407 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,419 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,434 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,471 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,476 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,491 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,509 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,547 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,557 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,579 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,581 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,606 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,627 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,652 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,658 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,682 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,701 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,725 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,729 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,764 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,768 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,778 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,785 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:30:39,822 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,381 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,392 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,399 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,437 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,443 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,454 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,461 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,498 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,505 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,524 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,545 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,582 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,587 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,595 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,601 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,637 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,641 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,655 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,672 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,710 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,739 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,768 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,781 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,798 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,829 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,858 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,871 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,876 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,920 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,946 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,956 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:09,978 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,007 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,034 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,048 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,057 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,062 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,071 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,076 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:31:10,112 - WARNING - An error occurred while calculating the shortest path: 'RoadNetwork' object has no attribute 'save_to_ache'
+2025-02-08 13:35:38,957 - DEBUG - Calculating shortest path from (-116.14696931238382, 43.583861354917644) to (-116.15225829999997, 43.57576880000005)
+2025-02-08 13:35:38,957 - DEBUG - Path retrieved from cache: ((-116.147268800115, 43.583959399906405), (-116.15225829998053, 43.57576880009009))
+2025-02-08 13:35:38,959 - DEBUG - Calculating shortest path from (-116.14696931238382, 43.583861354917644) to (-116.17626649999994, 43.59798930000005)
+2025-02-08 13:35:38,959 - DEBUG - Path retrieved from cache: ((-116.147268800115, 43.583959399906405), (-116.17626649969918, 43.597989299566564))
+2025-02-08 13:35:38,960 - DEBUG - Calculating shortest path from (-116.14696931238382, 43.583861354917644) to (-116.16097469999994, 43.59438450000005)
+2025-02-08 13:35:38,960 - DEBUG - Path retrieved from cache: ((-116.147268800115, 43.583959399906405), (-116.16097470012227, 43.59438450024453))
+2025-02-08 13:35:38,961 - DEBUG - Calculating shortest path from (-116.14696931238382, 43.583861354917644) to (-116.12991139999997, 43.60876140000005)
+2025-02-08 13:35:38,961 - DEBUG - Path retrieved from cache: ((-116.147268800115, 43.583959399906405), (-116.12991139989117, 43.6087613997189))
+2025-02-08 13:35:38,962 - DEBUG - Calculating shortest path from (-116.14582881105076, 43.58694404203396) to (-116.15225829999997, 43.57576880000005)
+2025-02-08 13:35:38,962 - DEBUG - Path retrieved from cache: ((-116.14586919960385, 43.587248699967574), (-116.15225829998053, 43.57576880009009))
+2025-02-08 13:35:38,964 - DEBUG - Calculating shortest path from (-116.14582881105076, 43.58694404203396) to (-116.17626649999994, 43.59798930000005)
+2025-02-08 13:35:38,964 - DEBUG - Path retrieved from cache: ((-116.14586919960385, 43.587248699967574), (-116.17626649969918, 43.597989299566564))
+2025-02-08 13:35:38,965 - DEBUG - Calculating shortest path from (-116.14582881105076, 43.58694404203396) to (-116.16097469999994, 43.59438450000005)
+2025-02-08 13:35:38,965 - DEBUG - Path retrieved from cache: ((-116.14586919960385, 43.587248699967574), (-116.16097470012227, 43.59438450024453))
+2025-02-08 13:35:38,966 - DEBUG - Calculating shortest path from (-116.14582881105076, 43.58694404203396) to (-116.12991139999997, 43.60876140000005)
+2025-02-08 13:35:38,966 - DEBUG - Path retrieved from cache: ((-116.14586919960385, 43.587248699967574), (-116.12991139989117, 43.6087613997189))
+2025-02-08 13:35:38,967 - DEBUG - Calculating shortest path from (-116.12294994668264, 43.57086518008407) to (-116.15225829999997, 43.57576880000005)
+2025-02-08 13:35:38,967 - DEBUG - Path retrieved from cache: ((-116.12302839994067, 43.570414799603384), (-116.15225829998053, 43.57576880009009))
+2025-02-08 13:35:38,968 - DEBUG - Calculating shortest path from (-116.12294994668264, 43.57086518008407) to (-116.17626649999994, 43.59798930000005)
+2025-02-08 13:35:38,969 - DEBUG - Path retrieved from cache: ((-116.12302839994067, 43.570414799603384), (-116.17626649969918, 43.597989299566564))
+2025-02-08 13:35:38,970 - DEBUG - Calculating shortest path from (-116.12294994668264, 43.57086518008407) to (-116.16097469999994, 43.59438450000005)
+2025-02-08 13:35:38,970 - DEBUG - Path retrieved from cache: ((-116.12302839994067, 43.570414799603384), (-116.16097470012227, 43.59438450024453))
+2025-02-08 13:35:38,971 - DEBUG - Calculating shortest path from (-116.12294994668264, 43.57086518008407) to (-116.12991139999997, 43.60876140000005)
+2025-02-08 13:35:38,971 - DEBUG - Path retrieved from cache: ((-116.12302839994067, 43.570414799603384), (-116.12991139989117, 43.6087613997189))
+2025-02-08 13:35:38,972 - DEBUG - Calculating shortest path from (-116.1526272612391, 43.58262032736627) to (-116.15225829999997, 43.57576880000005)
+2025-02-08 13:35:38,972 - DEBUG - Path retrieved from cache: ((-116.15261409966092, 43.58288610041325), (-116.15225829998053, 43.57576880009009))
+2025-02-08 13:35:38,974 - DEBUG - Calculating shortest path from (-116.1526272612391, 43.58262032736627) to (-116.17626649999994, 43.59798930000005)
+2025-02-08 13:35:38,974 - DEBUG - Path retrieved from cache: ((-116.15261409966092, 43.58288610041325), (-116.17626649969918, 43.597989299566564))
+2025-02-08 13:35:38,975 - DEBUG - Calculating shortest path from (-116.1526272612391, 43.58262032736627) to (-116.16097469999994, 43.59438450000005)
+2025-02-08 13:35:38,975 - DEBUG - Path retrieved from cache: ((-116.15261409966092, 43.58288610041325), (-116.16097470012227, 43.59438450024453))
+2025-02-08 13:35:38,976 - DEBUG - Calculating shortest path from (-116.1526272612391, 43.58262032736627) to (-116.12991139999997, 43.60876140000005)
+2025-02-08 13:35:38,976 - DEBUG - Path retrieved from cache: ((-116.15261409966092, 43.58288610041325), (-116.12991139989117, 43.6087613997189))
+2025-02-08 13:35:38,977 - DEBUG - Calculating shortest path from (-116.1348672660115, 43.575777666506156) to (-116.15225829999997, 43.57576880000005)
+2025-02-08 13:35:38,977 - DEBUG - Path retrieved from cache: ((-116.1350070997978, 43.576097499599996), (-116.15225829998053, 43.57576880009009))
+2025-02-08 13:35:38,978 - DEBUG - Calculating shortest path from (-116.1348672660115, 43.575777666506156) to (-116.17626649999994, 43.59798930000005)
+2025-02-08 13:35:38,978 - DEBUG - Path retrieved from cache: ((-116.1350070997978, 43.576097499599996), (-116.17626649969918, 43.597989299566564))
+2025-02-08 13:35:38,980 - DEBUG - Calculating shortest path from (-116.1348672660115, 43.575777666506156) to (-116.16097469999994, 43.59438450000005)
+2025-02-08 13:35:38,980 - DEBUG - Path retrieved from cache: ((-116.1350070997978, 43.576097499599996), (-116.16097470012227, 43.59438450024453))
+2025-02-08 13:35:38,981 - DEBUG - Calculating shortest path from (-116.1348672660115, 43.575777666506156) to (-116.12991139999997, 43.60876140000005)
+2025-02-08 13:35:38,981 - DEBUG - Path retrieved from cache: ((-116.1350070997978, 43.576097499599996), (-116.12991139989117, 43.6087613997189))

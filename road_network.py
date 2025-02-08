@@ -5,6 +5,17 @@ from scipy.spatial import KDTree
 import pickle
 import os
 import matplotlib.pyplot as plt
+import logging
+
+# Set up logging
+log_dir = "log"
+os.makedirs(log_dir, exist_ok=True)
+logging.basicConfig(filename=os.path.join(log_dir, 'road_network.log'), level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Set matplotlib logger to WARNING level to ignore debug messages
+matplotlib_logger = logging.getLogger('matplotlib')
+matplotlib_logger.setLevel(logging.WARNING)
 
 class RoadNetwork:
     def __init__(self, geo_series: gpd.GeoSeries = None, cache_dir="cache", use_cache=True):
@@ -49,13 +60,14 @@ class RoadNetwork:
         return nearest_node
 
     def get_shortest_path(self, start_point, end_point):
+        logging.debug(f"Calculating shortest path from {start_point} to {end_point}")
         start_point = self.snap_to_network(start_point)
         end_point = self.snap_to_network(end_point)
         path_key = (start_point, end_point)
         
         # Check if the path is already cached
         if path_key in self.shortest_paths:
-            print("Path retrieved from cache. {}".format(path_key))
+            logging.debug(f"Path retrieved from cache: {path_key}")
             return self.shortest_paths[path_key]
         
         # Calculate the path if not cached
@@ -65,10 +77,14 @@ class RoadNetwork:
             
             # Save the updated shortest paths to cache
             self.save_to_cache()
-            print("Path calculated and cached. {}".format(path_key))
+            logging.debug(f"Path calculated and cached: {path_key}")
                 
             return path
-        except nx.NetworkXNoPath:
+        except nx.NetworkXNoPath as e:
+            logging.warning(f"No path found from {start_point} to {end_point}: {e}")
+            return None
+        except Exception as e:
+            logging.warning(f"An error occurred while calculating the shortest path: {e}")
             return None
 
     def save_to_cache(self):
