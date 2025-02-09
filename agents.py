@@ -10,20 +10,44 @@ class Resident(mg.GeoAgent):
     def __init__(self, model, geometry, crs):
         super().__init__(model, geometry, crs)
         self.origin = self.model.road_network.snap_to_network((self.geometry.x, self.geometry.y))
-        self.destination = (-116.15188, 43.57599)  # A test shelter location
+        self.destination = () # A test shelter location
+        self.shelters = self.model.agents_by_type[Shelter]
         self.path = []
         self.path_index = 0
 
-        self._calculate_path()
+        # self._calculate_path()
+        self.choose_shelter()
 
     def _calculate_path(self):
 
         self.path = self.model.road_network.get_shortest_path((self.geometry.x, self.geometry.y), self.destination)
         self.path_index = 0
 
+    def choose_shelter(self):
+        # Choose the nearest shelter based on the shortest path
+        min_distance = float('inf')
+        nearest_shelter = None
+        nearest_shelter_path = None
+        for shelter in self.shelters:
+            path = self.model.road_network.get_shortest_path((self.geometry.x, self.geometry.y), (shelter.geometry.x, shelter.geometry.y))
+            distance = LineString(path).length
+            if distance < min_distance:
+                min_distance = distance
+                nearest_shelter = shelter
+                nearest_shelter_path = path
+        # print("Nearest shelter: ", nearest_shelter.geometry)
+        self.destination = (nearest_shelter.geometry.x, nearest_shelter.geometry.y)
+        self.path = nearest_shelter_path
+        self.path_index = 0
 
+    
     def step(self):
         if self.path_index < len(self.path):
             next_point = self.path[self.path_index]
             self.geometry = Point(next_point)
             self.path_index += 1
+
+class Shelter(mg.GeoAgent):
+
+    def __init__(self, model, geometry, crs):
+        super().__init__(model, geometry, crs)

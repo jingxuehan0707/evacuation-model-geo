@@ -1,18 +1,25 @@
 from mesa.visualization import Slider, SolaraViz, make_plot_component
 from mesa_geo.visualization import make_geospace_component
 from model import EvacuationModel
+from agents import Resident, Shelter
 from ipywidgets import Layout
 
 model_params = {
-    "num_steps": Slider("Number of steps", 30, 10, 100, 1),
+    "num_steps": Slider("Number of steps", 1000, 10, 1000, 1),
 }
 
 def draw_agents(agent):
-    portrayal = {
-        "color": "Green",
-        "weight": 1,
-        # "radius": 1
-    }
+
+    if isinstance(agent, Resident):
+        portrayal = {
+            "color": "Green",
+            "weight": 5,
+        }
+    if isinstance(agent, Shelter):
+        portrayal = {
+            "color": "Red",
+            "weight": 10,
+        }
     return portrayal
 
 model = EvacuationModel()
@@ -21,8 +28,8 @@ page = SolaraViz(
     [
         make_geospace_component(
             draw_agents,
-            zoom=12,
-            # layout=Layout(width="800px", height="100%"),
+            zoom=13,
+            layout=Layout(width="800px"),
         ),
         # make_plot_component("steps"),
     ],

@@ -30,6 +30,7 @@ class RoadNetwork:
         if use_cache and self._cache_exists():
             self.load_from_cache()
         elif geo_series is not None:
+            self.clear_cache()
             self._build_graph(geo_series)
             self.kdtree = KDTree(self.nodes)
             self.save_to_cache()
@@ -164,13 +165,13 @@ def demo_multiple_points():
     start_points_gdf = gpd.read_file('data/gcs/population_distribution.shp')
     start_points = [Point(xy) for xy in zip(start_points_gdf.geometry.x, start_points_gdf.geometry.y)]
     
-    # Read end points from shelter.shp
+    # Read end points from shelters.shp
     end_points_gdf = gpd.read_file('data/gcs/shelters.shp')
     end_points = [Point(xy) for xy in zip(end_points_gdf.geometry.x, end_points_gdf.geometry.y)]
     
     # Read road network from shapefile
     geo_series = gpd.read_file('data/gcs/road_network.shp')['geometry']
-    road_network = RoadNetwork(geo_series, use_cache=True)
+    road_network = RoadNetwork(geo_series, use_cache=False)
     
     fig, ax = plt.subplots()
     geo_series.plot(ax=ax)
@@ -184,6 +185,7 @@ def demo_multiple_points():
     #         shortest_path = road_network.get_shortest_path((start_point.x, start_point.y), (end_point.x, end_point.y))
     #         if shortest_path:
     #             shortest_path_line = LineString(shortest_path)
+    #             print(shortest_path_line.length)
     #             ax.plot(*shortest_path_line.xy, color='red')
     #         ax.scatter(start_point.x, start_point.y, color='green')
     #         ax.scatter(end_point.x, end_point.y, color='blue')
@@ -199,7 +201,7 @@ if __name__ == "__main__":
     
     # example()
     # demo()
-    demo_clear_cache()
+    # demo_clear_cache()
     demo_multiple_points()
     # demo_multiple_points()
     
