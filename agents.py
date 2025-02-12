@@ -14,6 +14,7 @@ class Resident(mg.GeoAgent):
         self.shelters = self.model.agents_by_type[Shelter]
         self.path = []
         self.path_index = 0
+        self.status = "waiting" # "waiting", "evacuating", "sheltered"
 
         # self._calculate_path()
         self.choose_shelter()
@@ -43,9 +44,12 @@ class Resident(mg.GeoAgent):
     
     def step(self):
         if self.path_index < len(self.path):
+            self.status = "evacuating"
             next_point = self.path[self.path_index]
             self.geometry = Point(next_point)
             self.path_index += 1
+        else: # TODO: there is bug here
+            self.status = "sheltered"
 
 class Shelter(mg.GeoAgent):
 

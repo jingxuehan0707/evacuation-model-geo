@@ -19,6 +19,7 @@ class EvacuationModel(mesa.Model):
         super().__init__()
         self.space = StudyArea(crs="EPSG:4326",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=gpd.read_file(self.road_network_shp)['geometry'], use_cache=True)
+        self.counts = {} # TODO: Agent counts by type
         self.steps = 0
         self.running = True
 
@@ -43,8 +44,9 @@ class EvacuationModel(mesa.Model):
 
         # Data collector
         self.datacollector = mesa.DataCollector(
-            {
+            model_reporters={
                 "steps": "steps",
+                "status": get_count_agent_sheltered
             }
         )
         self.datacollector.collect(self)
@@ -59,10 +61,22 @@ class EvacuationModel(mesa.Model):
         else:
             self.running = False
 
+def get_count_agent_sheltered(model):
+    # TODO: save the count inside the Resident class
+    n = 0
+    for agent in model.agents_by_type[Resident]:
+        if agent.status == "sheltered":
+            print(agent.geometry)
+            print(agent.status)
+            n += 1
+    print(n)
+    return n
+
 def demo():
     model = EvacuationModel()
-    for i in range(100):
+    for i in range(10):
         model.step()
+        get_count_agent_sheltered(model)
 
 if __name__ == "__main__":
     demo()
