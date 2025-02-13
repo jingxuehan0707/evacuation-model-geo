@@ -13,7 +13,7 @@ def draw_agents(agent):
     if isinstance(agent, Resident):
         if agent.status == "waiting":
             portrayal = {
-            "color": "#FF6347",  # Tomato
+            "color": "#FF00FF",  # Light Magenta
             "weight": 5,
             }
         if agent.status == "evacuating":
@@ -42,7 +42,7 @@ page = SolaraViz(
             zoom=13,
             # layout=Layout(width="800px"),
         ),
-        make_plot_component("status"),
+        make_plot_component("agents evacuated"),
     ],
     name="Evacuation Model",
     model_params=model_params,
