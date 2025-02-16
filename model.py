@@ -22,23 +22,25 @@ class EvacuationModel(mesa.Model):
     road_network_shp = "data/pcs/road_network.shp"
 
     # Create gdf for the shapefile
-    population_distribution_gdf = gpd.read_file(population_distribution_shp).sample(100)
+    population_distribution_gdf = gpd.read_file(population_distribution_shp)
     shelters_gdf = gpd.read_file(shelters_shp)
     road_network_gdf = gpd.read_file(road_network_shp)
 
-    def __init__(self, num_steps=100):
+    def __init__(self, num_steps=100, num_residents=100):
         super().__init__()
         self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.counts = {} # TODO: Agent counts by type
         self.steps = 0
+        self.step_interval = 10 # one step = one second
         self.running = True
 
         # Model parameters
         self.num_steps = num_steps
+        self.num_residents = num_residents
 
         # Build shortest path cache
-        start_points_gdf = self.population_distribution_gdf
+        start_points_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
         start_points = [Point(xy) for xy in zip(start_points_gdf.geometry.x, start_points_gdf.geometry.y)]
         end_points_gdf = self.shelters_gdf
         end_points = [Point(xy) for xy in zip(end_points_gdf.geometry.x, end_points_gdf.geometry.y)]
@@ -50,9 +52,8 @@ class EvacuationModel(mesa.Model):
         self.space.add_agents(shelter_agents)
 
         resident_ag_creator = mg.AgentCreator(Resident, model=self)
-        resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf)
+        resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf.sample(n=self.num_residents))
         self.space.add_agents(resident_agents)
-        print(len(self.agents_by_type[Resident]))
 
         # Data collector
         self.datacollector = mesa.DataCollector(
@@ -68,13 +69,13 @@ class EvacuationModel(mesa.Model):
         self.agents_by_type[Resident].do("step")
 
         self.datacollector.collect(self)
-        if self.steps <= self.num_steps:
+        if get_count_agent_sheltered(self) < len(self.agents_by_type[Resident]):
             print("Step: ", self.steps)
         else:
             self.running = False
 
 def get_count_agent_sheltered(model):
-    # TODO: save the count inside the Resident class
+
     n = 0
     for agent in model.agents_by_type[Resident]:
         if agent.status == "sheltered":
