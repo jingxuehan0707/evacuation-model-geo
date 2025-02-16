@@ -11,10 +11,15 @@ import random
 
 class EvacuationModel(mesa.Model):
 
-    # The shapefile path
-    population_distribution_shp = "data/gcs/population_distribution.shp"
-    shelters_shp = "data/gcs/shelters.shp"
-    road_network_shp = "data/gcs/road_network.shp"
+    # The shapefile path, in wgs84
+    # population_distribution_shp = "data/gcs/population_distribution.shp"
+    # shelters_shp = "data/gcs/shelters.shp"
+    # road_network_shp = "data/gcs/road_network.shp"
+
+    # The shapefile path, in WGS_1984_UTM_Zone_11N, epsg:32611
+    population_distribution_shp = "data/pcs/population_distribution.shp"
+    shelters_shp = "data/pcs/shelters.shp"
+    road_network_shp = "data/pcs/road_network.shp"
 
     # Create gdf for the shapefile
     population_distribution_gdf = gpd.read_file(population_distribution_shp).sample(100)
@@ -23,7 +28,7 @@ class EvacuationModel(mesa.Model):
 
     def __init__(self, num_steps=100):
         super().__init__()
-        self.space = StudyArea(crs="EPSG:4326",warn_crs_conversion=True)
+        self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.counts = {} # TODO: Agent counts by type
         self.steps = 0
