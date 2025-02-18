@@ -162,24 +162,23 @@ def demo():
 
 def demo_multiple_points():
     # Read start points from population_distribution.shp
-    start_points_gdf = gpd.read_file('data/gcs/population_distribution.shp')
+    start_points_gdf = gpd.read_file('data/pcs/population_distribution.shp')
     start_points = [Point(xy) for xy in zip(start_points_gdf.geometry.x, start_points_gdf.geometry.y)]
     
     # Read end points from shelters.shp
-    end_points_gdf = gpd.read_file('data/gcs/shelters.shp')
+    end_points_gdf = gpd.read_file('data/pcs/shelters.shp')
     end_points = [Point(xy) for xy in zip(end_points_gdf.geometry.x, end_points_gdf.geometry.y)]
     
     # Read road network from shapefile
-    geo_series = gpd.read_file('data/gcs/road_network.shp')['geometry']
+    geo_series = gpd.read_file('data/pcs/road_network.shp')['geometry']
     road_network = RoadNetwork(geo_series, use_cache=False)
-    
-    fig, ax = plt.subplots()
-    geo_series.plot(ax=ax)
     
     # Batch calculate shortest paths
     road_network.batch_calculate_shortest_paths(start_points, end_points)
     
     # Plot shortest paths
+    # fig, ax = plt.subplots()
+    # geo_series.plot(ax=ax)
     # for start_point in start_points:
     #     for end_point in end_points:
     #         shortest_path = road_network.get_shortest_path((start_point.x, start_point.y), (end_point.x, end_point.y))
