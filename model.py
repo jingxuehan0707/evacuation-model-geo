@@ -5,7 +5,9 @@ import geopandas as gpd
 from agents import Resident, Shelter
 from road_network import RoadNetwork
 from space import StudyArea
-import random
+from cell import FireHazard
+import rasterio as rio
+import numpy as np
 
 # Note: When using mg.AgentCreator, the agents are stored in the self.model
 
@@ -20,6 +22,9 @@ class EvacuationModel(mesa.Model):
     population_distribution_shp = "data/pcs/population_distribution.shp"
     shelters_shp = "data/pcs/shelters.shp"
     road_network_shp = "data/pcs/road_network.shp"
+
+    # The hazard raster path
+    hazard_raster = "data/pcs/fire_arrival_time.asc"
 
     # Create gdf for the shapefile
     population_distribution_gdf = gpd.read_file(population_distribution_shp)
@@ -55,6 +60,21 @@ class EvacuationModel(mesa.Model):
         resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf.sample(n=self.num_residents))
         self.space.add_agents(resident_agents)
 
+        # Create fire hazard cells
+        with rio.open(self.hazard_raster) as src:
+            values = src.read()
+            width = src.width
+            height = src.height
+            bounds = list(src.bounds)
+            print(src.crs)
+            print(bounds)
+            print(np.max(values))
+            hazard_raster_layer = mg.RasterLayer(width, height, "EPSG:32611", bounds, self, FireHazard)
+            hazard_raster_layer.apply_raster(values, "fire_arrival_time")
+            self.space.add_layer(hazard_raster_layer)
+        
+        print(self.space.layers[0].get_raster("fire_arrival_time"))
+            
         # Data collector
         self.datacollector = mesa.DataCollector(
             model_reporters={
@@ -67,6 +87,7 @@ class EvacuationModel(mesa.Model):
     def step(self):
 
         self.agents_by_type[Resident].do("step")
+        self.agents_by_type[FireHazard].do("step")
 
         self.datacollector.collect(self)
         if get_count_agent_sheltered(self) < len(self.agents_by_type[Resident]):
