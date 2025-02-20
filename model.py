@@ -37,7 +37,8 @@ class EvacuationModel(mesa.Model):
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.counts = {} # TODO: Agent counts by type
         self.steps = 0
-        self.step_interval = 10 # one step = one second
+        self.step_interval = 60 # how many seconds each step represents
+        self.time_elapsed = self.steps * self.step_interval # The total time elapsed in seconds
         self.running = True
 
         # Model parameters
@@ -66,14 +67,9 @@ class EvacuationModel(mesa.Model):
             width = src.width
             height = src.height
             bounds = list(src.bounds)
-            print(src.crs)
-            print(bounds)
-            print(np.max(values))
             hazard_raster_layer = mg.RasterLayer(width, height, "EPSG:32611", bounds, self, FireHazard)
             hazard_raster_layer.apply_raster(values, "fire_arrival_time")
             self.space.add_layer(hazard_raster_layer)
-        
-        print(self.space.layers[0].get_raster("fire_arrival_time"))
             
         # Data collector
         self.datacollector = mesa.DataCollector(
@@ -86,10 +82,14 @@ class EvacuationModel(mesa.Model):
 
     def step(self):
 
+        self.time_elapsed = self.steps * self.step_interval
+
         self.agents_by_type[Resident].do("step")
         self.agents_by_type[FireHazard].do("step")
 
         self.datacollector.collect(self)
+
+        # Stop the model if all agents are sheltered
         if get_count_agent_sheltered(self) < len(self.agents_by_type[Resident]):
             print("Step: ", self.steps)
         else:

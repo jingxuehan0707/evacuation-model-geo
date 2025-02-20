@@ -39,7 +39,7 @@ def draw_agents(agent):
     
     if isinstance(agent, mg.Cell):
         if isinstance(agent, FireHazard):
-            if agent.fire_arrival_time == -9999:
+            if agent.fire_arrival_time == -9999 or agent.is_burnt == False:
                 return (0, 0, 0, 0)
             else:
                 return map_to_red_gradient(agent.fire_arrival_time)
@@ -74,7 +74,7 @@ page = SolaraViz(
     [
         make_geospace_component(
             draw_agents,
-            zoom=12,
+            zoom=13,
             # layout=Layout(width="800px"),
         ),
         make_plot_component("agents evacuated"),

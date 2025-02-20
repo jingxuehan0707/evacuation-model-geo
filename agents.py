@@ -14,7 +14,7 @@ class Resident(mg.GeoAgent):
         self.shelters = self.model.agents_by_type[Shelter]
         self.path = LineString()
         self.path_index = 0
-        self.speed = 25 # km/h
+        self.speed = 1 # km/h
         self.mode = "drive "# travel mode
         self.distance_to_dest = 0 # distance to destination
         self.status = "waiting" # "waiting", "evacuating", "sheltered"
