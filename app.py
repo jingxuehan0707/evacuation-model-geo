@@ -5,8 +5,9 @@ from mesa.visualization import Slider, SolaraViz, make_plot_component
 from mesa_geo.visualization import make_geospace_component
 import mesa_geo as mg
 from model import EvacuationModel
-from agents import Resident, Shelter
-from cell import FireHazard
+from agents import Resident, Shelter, FireHazard
+from cell import FireHazardCell
+import xyzservices.providers as xyz
 
 model_params = {
     "num_steps": Slider("Number of steps", 1000, 10, 1000, 1),
@@ -31,15 +32,26 @@ def draw_agents(agent):
                 "color": "#4682B4",  # Steel Blue
                 "weight": 5,
                 }
+            if agent.status == "dead":
+                return {
+                "color": "#000000",  # Black
+                "weight": 5,
+                }
         elif isinstance(agent, Shelter):
             return {
                 "color": "Red",
                 "weight": 10,
             }
-    
+        # elif isinstance(agent, FireHazard):
+        #     return {
+        #         "color": "Orange",
+        #         "fillColor": "Red",
+        #         "fillOpacity": 0.5,
+        #         "weight": 1,
+        #     }
     if isinstance(agent, mg.Cell):
-        if isinstance(agent, FireHazard):
-            if agent.fire_arrival_time == -9999:
+        if isinstance(agent, FireHazardCell):
+            if agent.fire_arrival_time == -9999 or agent.is_burnt == False:
                 return (0, 0, 0, 0)
             else:
                 return map_to_red_gradient(agent.fire_arrival_time)
@@ -69,12 +81,14 @@ def map_to_red_gradient(cell_values, min_value=0, max_value=120):
     return rgba_colors
 
 model = EvacuationModel()
+esri_imagery = xyz.USGS.USImagery
 page = SolaraViz(
     model,
     [
         make_geospace_component(
             draw_agents,
-            zoom=12,
+            zoom=13,
+            tiles=esri_imagery
             # layout=Layout(width="800px"),
         ),
         make_plot_component("agents evacuated"),

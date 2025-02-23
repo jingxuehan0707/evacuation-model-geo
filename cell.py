@@ -2,12 +2,14 @@ import mesa
 import mesa_geo as mg
 import rasterio as rio
 
-class FireHazard(mg.Cell):
+class FireHazardCell(mg.Cell):
     def __init__(self, model, pos, indices):
         super().__init__(model, pos, indices)
-        self.fire_arrival_time = None  # in seconds
-        self.is_burnt = None  # boolean
+        self.fire_arrival_time = None  # in minutes
+        self.is_burnt = False  # boolean
 
     def step(self):
-        # Logic for what happens at each step
-        pass
+
+        if (self.model.time_elapsed >= self.fire_arrival_time * 60) and (self.is_burnt == False) and (self.fire_arrival_time != -9999):
+            self.is_burnt = True
+        

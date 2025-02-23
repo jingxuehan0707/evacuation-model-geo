@@ -1,5 +1,7 @@
 import mesa_geo as mg
 from pyproj import Transformer
+import rasterio
+import shapely
 from shapely.geometry import Point, LineString
 from road_network import RoadNetwork
 import networkx as nx
@@ -14,7 +16,7 @@ class Resident(mg.GeoAgent):
         self.shelters = self.model.agents_by_type[Shelter]
         self.path = LineString()
         self.path_index = 0
-        self.speed = 25 # km/h
+        self.speed = 1 # km/h
         self.mode = "drive "# travel mode
         self.distance_to_dest = 0 # distance to destination
         self.status = "waiting" # "waiting", "evacuating", "sheltered"
@@ -42,6 +44,12 @@ class Resident(mg.GeoAgent):
 
     
     def step(self):
+
+        # Check if the agent is in the fire hazard area
+        if self.geometry.within(self.model.agents_by_type[FireHazard][0].geometry):
+            self.status = "dead"
+            return
+
         if self.distance_to_dest >= 0:
             self.status = "evacuating"
             
@@ -61,3 +69,18 @@ class Shelter(mg.GeoAgent):
 
     def __init__(self, model, geometry, crs):
         super().__init__(model, geometry, crs)
+
+class FireHazard(mg.GeoAgent):
+
+    def __init__(self, model, geometry, crs):
+        super().__init__(model, geometry, crs)
+
+    def step(self):
+
+        # Get the fire hazard cells
+        hazard_cell = self.model.space.layers[0].get_raster(attr_name="is_burnt")
+        # Update the geometry using the hazard cell
+        mask = hazard_cell == True
+        hazard_shapes = list(rasterio.features.shapes(hazard_cell, mask=mask, transform=self.model.transform))
+        hazard_geoms = [shapely.geometry.shape(geom) for geom, value in hazard_shapes if value >= 0]
+        self.geometry = shapely.ops.unary_union(hazard_geoms)
