@@ -6,6 +6,7 @@ from shapely.geometry import Point, LineString
 from road_network import RoadNetwork
 import networkx as nx
 import geopandas as gpd
+import math
 
 class Resident(mg.GeoAgent):
 
@@ -42,7 +43,10 @@ class Resident(mg.GeoAgent):
         self.path_index = 0
         self.distance_to_dest = nearest_shelter_path.length
 
-    
+    def update_speed(self):
+        """Update the speed using the sin wave between 0 - 25, every 10 steps"""
+        self.speed = 1 * abs(math.sin(self.model.steps / 10))
+
     def step(self):
 
         # Check if the agent is in the fire hazard area
@@ -53,6 +57,9 @@ class Resident(mg.GeoAgent):
         if self.distance_to_dest >= 0:
             self.status = "evacuating"
             
+            # Update the speed 
+            self.update_speed()
+
             # Calculate the distance to travel in this step (speed in km/h, step_interval in seconds)
             distance_to_travel = (self.speed * 1000) / 3600 * self.model.step_interval  # convert speed to m/s
             
