@@ -47,12 +47,22 @@ class EvacuationModel(mesa.Model):
     shelters_gdf = gpd.read_file(shelters_shp)
     road_network_gdf = gpd.read_file(road_network_shp)
 
-    def __init__(self, num_steps=100, num_residents=100, **kwargs):
+    def __init__(
+        self, 
+        num_steps=100, 
+        num_residents=100, 
+        max_speed=35, 
+        acceleration=5, 
+        deceleration=25, 
+        alpha=0.14, 
+        Rtau=10, 
+        Rsig=1.65
+    ):
         super().__init__()
         self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.steps = 0
-        self.step_interval = 1 # How many seconds each step represents
+        self.step_interval = 10 # How many seconds each step represents
         self.time_elapsed = self.steps * self.step_interval # The total time elapsed in seconds
         self.running = True
 
@@ -61,14 +71,14 @@ class EvacuationModel(mesa.Model):
         self.num_residents = num_residents
 
         # Driving parameters
-        self.max_speed = 35 # mph
-        self.acceleration = 5 # ft/s^2
-        self.deceleration = 25 # ft/s^2
-        self.alpha = 0.14 # mile^2/hr
+        self.max_speed = float(max_speed) # mph
+        self.acceleration = float(acceleration) # ft/s^2
+        self.deceleration = float(deceleration) # ft/s^2
+        self.alpha = float(alpha) # mile^2/hr
 
         # Decision making time parameter
-        self.Rtau = 0 # The milling time in minutes, the time it takes for a resident to receive the notification
-        self.Rsig = 1.65 # The scale factor parameter
+        self.Rtau = float(Rtau) # The milling time in minutes, the time it takes for a resident to receive the notification
+        self.Rsig = float(Rsig) # The scale factor parameter
 
         # Statistics
         self.n_evacuated = 0
