@@ -10,6 +10,7 @@ import rasterio as rio
 from rasterio.transform import Affine
 import rasterio.features
 import numpy as np
+import pandas as pd
 
 # Note: When using mg.AgentCreator, the agents are stored in the self.model
 
@@ -46,19 +47,43 @@ class EvacuationModel(mesa.Model):
     shelters_gdf = gpd.read_file(shelters_shp)
     road_network_gdf = gpd.read_file(road_network_shp)
 
-    def __init__(self, num_steps=100, num_residents=1):
+    def __init__(
+        self, 
+        num_steps=100, 
+        num_residents=100, 
+        max_speed=35, 
+        acceleration=5, 
+        deceleration=25, 
+        alpha=0.14, 
+        Rtau=10, 
+        Rsig=1.65
+    ):
         super().__init__()
         self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
-        self.counts = {} # TODO: Agent counts by type
         self.steps = 0
-        self.step_interval = 60 # how many seconds each step represents
+        self.step_interval = 10 # How many seconds each step represents
         self.time_elapsed = self.steps * self.step_interval # The total time elapsed in seconds
         self.running = True
 
         # Model parameters
         self.num_steps = num_steps
         self.num_residents = num_residents
+
+        # Driving parameters
+        self.max_speed = float(max_speed) # mph
+        self.acceleration = float(acceleration) # ft/s^2
+        self.deceleration = float(deceleration) # ft/s^2
+        self.alpha = float(alpha) # mile^2/hr
+
+        # Decision making time parameter
+        self.Rtau = float(Rtau) # The milling time in minutes, the time it takes for a resident to receive the notification
+        self.Rsig = float(Rsig) # The scale factor parameter
+
+        # Statistics
+        self.n_evacuated = 0
+        self.n_dead = 0
+        self.evacuation_time_list = []
 
         # Build shortest path cache
         start_points_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
@@ -101,40 +126,63 @@ class EvacuationModel(mesa.Model):
         self.datacollector = mesa.DataCollector(
             model_reporters={
                 "steps": "steps",
-                "agents evacuated": get_count_agent_sheltered
+                # "agents evacuated": get_count_agent_evacuated,
+                "Evacuated": "n_evacuated",
+                "Casuality": "n_dead",
+                "Percentage of Casuality": lambda m: m.n_dead / m.num_residents * 100,
+                "Percentage of Evacuated": lambda m: m.n_evacuated / m.num_residents * 100,
+                "Evacuation Time": lambda m: m.evacuation_time_list,
             }
         )
         self.datacollector.collect(self)
 
+    def get_statistics(self):
+        status = self.agents_by_type[Resident].get("status")
+        return pd.Series(status).value_counts()
+
     def step(self):
 
         self.time_elapsed = self.steps * self.step_interval
-    
+
         self.agents_by_type[FireHazardCell].do("step")
         self.agents_by_type[FireHazard].do("step")
         self.agents_by_type[Resident].do("step")
 
+        # Collect data
+        self.n_dead = self.get_statistics().get("dead", 0)
+        self.n_evacuated = self.get_statistics().get("evacuated", 0)
+
         self.datacollector.collect(self)
 
-        # Stop the model if all agents are sheltered
-        if get_count_agent_sheltered(self) < len(self.agents_by_type[Resident]):
-            print("Step: ", self.steps)
+        # Stop the model if all agents are evacuated
+        if get_count_agent_evacuated(self) < len(self.agents_by_type[Resident]):
+            # print("Step: ", self.steps)
+            pass
         else:
             self.running = False
 
-def get_count_agent_sheltered(model):
+def get_count_agent_evacuated(model):
 
     n = 0
     for agent in model.agents_by_type[Resident]:
-        if agent.status == "sheltered":
+        if agent.status == "evacuated":
             n += 1
     return n
 
+def get_status(model):
+    status = model.agents_by_type[Resident].get("status")
+    return pd.Series(status).value_counts()
+
+def get_evacuation_time(model):
+    evacuation_time = model.agents_by_type[Resident].get("evacuation_time")
+    return pd.Series(evacuation_time).replace(np.inf, np.nan).dropna().tolist()
+
 def demo():
     model = EvacuationModel()
-    for i in range(3):
+    for i in range(3600):
         model.step()
-        get_count_agent_sheltered(model)
+        print(model.steps, model.n_evacuated, model.n_dead)
+        print(get_evacuation_time(model))
 
 if __name__ == "__main__":
     demo()
