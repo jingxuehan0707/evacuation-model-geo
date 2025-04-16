@@ -53,14 +53,14 @@ class EvacuationModel(mesa.Model):
         acceleration=5, 
         deceleration=25, 
         alpha=0.14, 
-        Rtau=10, 
+        Rtau=45, 
         Rsig=1.65
     ):
         super().__init__()
         self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.steps = 0
-        self.step_interval = 10 # How many seconds each step represents
+        self.step_interval = 1 # How many seconds each step represents
         self.time_elapsed = self.steps * self.step_interval # The total time elapsed in seconds
         self.running = True
 
@@ -154,7 +154,7 @@ class EvacuationModel(mesa.Model):
         self.datacollector.collect(self)
 
         # Stop the model if all agents are evacuated
-        if get_count_agent_evacuated(self) < len(self.agents_by_type[Resident]):
+        if self.n_dead + self.n_evacuated < len(self.agents_by_type[Resident]):
             # print("Step: ", self.steps)
             pass
         else:
@@ -190,7 +190,7 @@ def simualtion():
     # Rtau = [10, 20, 30, 40, 50]
     scenarios = {
         "num_residents": [500, 600, 700, 800, 900],
-        "Rtau": [10, 20, 30, 40, 50]
+        "Rtau": [90]
     }
 
     # Create a list to store the results
@@ -213,7 +213,7 @@ def simualtion():
 
     # Save the results to a csv file
     df = pd.DataFrame(results)
-    df.to_csv("results.csv", index=False)
+    df.to_csv("siumlation_results.csv", index=False)
 
 if __name__ == "__main__":
     # demo()
