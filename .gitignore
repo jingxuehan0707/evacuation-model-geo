@@ -1,4 +1,4 @@
-/.DS_Store
+.DS_Store
 /__pycache__
 /data/gcs
 /cache
@@ -8,4 +8,3 @@
 /qgis
 /debug
 profile.pyspy
-img/.DS_Store

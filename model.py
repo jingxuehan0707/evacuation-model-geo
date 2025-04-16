@@ -31,17 +31,15 @@ class EvacuationModel(mesa.Model):
     hazard_raster_translated = "data/pcs/fire_arrival_time_translated.asc"
 
     # Create a new raster with affine transform (-100, 0)
-    with rio.open(hazard_raster) as src:
-        data = src.read(1)
-        transform = src.transform * Affine.translation(-20, 20)
-        meta = src.meta.copy()
-        meta.update({"transform": transform})
+    # with rio.open(hazard_raster) as src:
+    #     data = src.read(1)
+    #     transform = src.transform * Affine.translation(-20, 20)
+    #     meta = src.meta.copy()
+    #     meta.update({"transform": transform})
         
-        with rio.open(hazard_raster_translated, 'w', **meta) as dst:
-            dst.write(data, 1)
+    #     with rio.open(hazard_raster_translated, 'w', **meta) as dst:
+    #         dst.write(data, 1)
         
-
-
     # Create gdf for the shapefile
     population_distribution_gdf = gpd.read_file(population_distribution_shp)
     shelters_gdf = gpd.read_file(shelters_shp)
@@ -55,14 +53,14 @@ class EvacuationModel(mesa.Model):
         acceleration=5, 
         deceleration=25, 
         alpha=0.14, 
-        Rtau=10, 
+        Rtau=45, 
         Rsig=1.65
     ):
         super().__init__()
         self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.steps = 0
-        self.step_interval = 10 # How many seconds each step represents
+        self.step_interval = 1 # How many seconds each step represents
         self.time_elapsed = self.steps * self.step_interval # The total time elapsed in seconds
         self.running = True
 
@@ -102,12 +100,13 @@ class EvacuationModel(mesa.Model):
         self.space.add_agents(resident_agents)
 
         # Create fire hazard cells
-        with rio.open(self.hazard_raster_translated) as src:  
+        with rio.open(self.hazard_raster) as src:  
             values = src.read()      
             width = src.width
             height = src.height
-            transform = src.transform            
+            transform = src.transform      
             bounds = list(src.bounds)
+            self.transform = transform
             hazard_raster_layer = mg.RasterLayer(width, height, "EPSG:32611", bounds, self, FireHazardCell)
             hazard_raster_layer.apply_raster(values, "fire_arrival_time")
             hazard_raster_layer.apply_raster(np.zeros_like(values), "is_burnt")
@@ -155,7 +154,7 @@ class EvacuationModel(mesa.Model):
         self.datacollector.collect(self)
 
         # Stop the model if all agents are evacuated
-        if get_count_agent_evacuated(self) < len(self.agents_by_type[Resident]):
+        if self.n_dead + self.n_evacuated < len(self.agents_by_type[Resident]):
             # print("Step: ", self.steps)
             pass
         else:
@@ -184,5 +183,38 @@ def demo():
         print(model.steps, model.n_evacuated, model.n_dead)
         print(get_evacuation_time(model))
 
+def simualtion():
+
+    # Create dictionary for differentn scenarios
+    # num_residents = [500, 600, 700, 800, 900]
+    # Rtau = [10, 20, 30, 40, 50]
+    scenarios = {
+        "num_residents": [500, 600, 700, 800, 900],
+        "Rtau": [90]
+    }
+
+    # Create a list to store the results
+    results = []
+
+    for num_residents in scenarios["num_residents"]:
+        for Rtau in scenarios["Rtau"]:
+            model = EvacuationModel(num_residents=num_residents, Rtau=Rtau)
+            while model.running:
+                model.step()
+                print(model.steps)
+            print("Simulation completed for num_residents: ", num_residents, "Rtau: ", Rtau)
+            results.append({
+                "num_residents": num_residents,
+                "Rtau": Rtau,
+                "n_evacuated": model.n_evacuated,
+                "n_dead": model.n_dead,
+                "evacuation_time": model.evacuation_time_list
+            })
+
+    # Save the results to a csv file
+    df = pd.DataFrame(results)
+    df.to_csv("siumlation_results.csv", index=False)
+
 if __name__ == "__main__":
-    demo()
+    # demo()
+    simualtion()
