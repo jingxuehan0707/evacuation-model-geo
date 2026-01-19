@@ -46,7 +46,7 @@ class EvacuationModel(mesa.Model):
     road_network_gdf = gpd.read_file(road_network_shp)
 
     # duplicate population_distribution_gdf to create more agents
-    population_distribution_gdf = pd.concat([population_distribution_gdf]*10, ignore_index=True)
+    # population_distribution_gdf = pd.concat([population_distribution_gdf]*10, ignore_index=True)
 
 
     def __init__(
@@ -88,7 +88,9 @@ class EvacuationModel(mesa.Model):
         self.evacuation_time_list = []
 
         # Build shortest path cache
-        start_points_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
+        # self.population_distribution_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
+        self.population_distribution_gdf = self.population_distribution_gdf.iloc[:self.num_residents]
+        start_points_gdf = self.population_distribution_gdf
         start_points = [Point(xy) for xy in zip(start_points_gdf.geometry.x, start_points_gdf.geometry.y)]
         end_points_gdf = self.shelters_gdf
         end_points = [Point(xy) for xy in zip(end_points_gdf.geometry.x, end_points_gdf.geometry.y)]
@@ -100,7 +102,8 @@ class EvacuationModel(mesa.Model):
         self.space.add_agents(shelter_agents)
 
         resident_ag_creator = mg.AgentCreator(Resident, model=self)
-        resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf.sample(n=self.num_residents))
+        # resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf.sample(n=self.num_residents))
+        resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf)
         self.space.add_agents(resident_agents)
 
         # Create fire hazard cells
@@ -181,11 +184,13 @@ def get_evacuation_time(model):
     return pd.Series(evacuation_time).replace(np.inf, np.nan).dropna().tolist()
 
 def demo():
-    model = EvacuationModel(num_residents=5000, Rtau=0)
-    for i in range(3600):
+    model = EvacuationModel(num_residents=2451, Rtau=0, Rsig=0)
+    for i in range(300):
         model.step()
         print(model.steps, model.n_evacuated, model.n_dead)
         # print(get_evacuation_time(model))
+    gdf = model.space.get_agents_as_GeoDataFrame(agent_cls=Resident)
+    gdf.to_file("debug/residents_output.shp")
 
 def simualtion():
 

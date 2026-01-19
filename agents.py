@@ -19,7 +19,6 @@ class Resident(mg.GeoAgent):
         self.destination = ()  # Placeholder for a test shelter location
         self.shelters = self.model.agents_by_type[Shelter]
         self.path = LineString()
-        self.path_index = 0
         self.speed = 0  # Speed in m/s
         self.heading = 0  # Heading in degrees (north=0, east=90, south=180, west=270)
         self.viewshed = None
@@ -153,6 +152,8 @@ class Resident(mg.GeoAgent):
         
         for agent in agents:
             distance = self.model.space.distance(self, agent)
+            if distance == 0: # In case the other agent is identical to self.
+                return nearest_agent
             if distance < min_distance:
                 min_distance = distance
                 nearest_agent = agent
@@ -179,15 +180,23 @@ class Resident(mg.GeoAgent):
         nearest_shelter_path = None
         for shelter in self.shelters:
             path = self.model.road_network.get_shortest_path((self.geometry.x, self.geometry.y), (shelter.geometry.x, shelter.geometry.y))
-            distance = LineString(path).length
-            if distance < min_distance:
-                min_distance = distance
-                nearest_shelter = shelter
-                nearest_shelter_path = LineString(path)
-        self.destination = (nearest_shelter.geometry.x, nearest_shelter.geometry.y)
-        self.path = nearest_shelter_path
-        self.path_index = 0
-        self.distance_to_dest = nearest_shelter_path.length
+            if path:
+                distance = LineString(path).length
+                if distance < min_distance:
+                    min_distance = distance
+                    nearest_shelter = shelter
+                    nearest_shelter_path = LineString(path)
+            else:
+                continue
+        if nearest_shelter:
+            self.destination = (nearest_shelter.geometry.x, nearest_shelter.geometry.y)
+            self.path = nearest_shelter_path
+            self.distance_to_dest = nearest_shelter_path.length
+        else: # If no shelter is reachable, set destination to None and path to empty
+            # print(f"Agent {self.unique_id} could not find a path to any shelter.")
+            self.destination = None
+            self.path = LineString()
+            self.distance_to_dest = 0
 
     def update_speed(self):
         """Update the speed using the sin wave between 0 - 25, every 10 steps"""
@@ -200,10 +209,17 @@ class Resident(mg.GeoAgent):
             self.status = "dead"
             return
         
+        # Mark the agent as dead if it has no destination or path
+        if self.destination is None:
+            self.status = "dead"
+            return
+        
+        # Agent starts evacuation after the decision time has passed
         if self.model.time_elapsed < self.decision_time:
             self.status = "waiting"
 
-        elif (self.distance_to_dest >= 0) and (self.model.time_elapsed >= self.decision_time):
+        # Agent start evacuating after the decision time has passed and there is still distance to destination
+        elif (self.distance_to_dest > 0) and (self.model.time_elapsed >= self.decision_time):
             self.status = "evacuating"
 
             # Find the nearest agent in viewshed
@@ -227,11 +243,13 @@ class Resident(mg.GeoAgent):
             #     nearest_agent = None
 
             # Use GeoSpace native search, the source code uses rtree.
-            neighbors_agents = self.model.space.get_neighbors_within_distance(self, 100) # it also gets the agent itself, we will filter it out later
+            neighbors_agents = self.model.space.get_neighbors_within_distance(self, 45) # it also gets the agent itself, we will filter it out later
             neighbors_residents = [agent for agent in neighbors_agents if isinstance(agent, Resident) and agent.unique_id != self.unique_id]
             neighbors_resident_in_fov = self.get_fov_agents(neighbors_residents, angle=20)
             if len(neighbors_resident_in_fov) > 0:
                 nearest_agent = self.get_nearest_agent(neighbors_resident_in_fov)
+                if nearest_agent:
+                    print(f"Agent {self.unique_id} found nearest agent {nearest_agent.unique_id} in FOV")
             else:
                 nearest_agent = None
 
@@ -258,7 +276,7 @@ class Resident(mg.GeoAgent):
 
             # Update the distance to destination
             self.distance_to_dest -= distance_to_travel
-        else:
+        else: # Agent has reached the destination
             self.status = "evacuated"
             if self.evacuation_time > self.model.time_elapsed:
                 self.evacuation_time = self.model.time_elapsed / 60
