@@ -68,42 +68,6 @@ class Resident(mg.GeoAgent):
         
         return heading
     
-    def calculate_viewshed(self, heading, angle=20, radius=100):
-        """
-        Calculate the viewshed triangle based on the agent's heading, angle, and radius.
-        The viewshed is represented as a triangle polygon with the agent's current position
-        as the apex and the left and right points calculated based on the given heading, angle, 
-        and radius.
-        :param heading: The direction the agent is facing in degrees (0-360).
-        :type heading: float
-        :param angle: The angle of the viewshed in degrees, defaults to 20.
-        :type angle: float, optional
-        :param radius: The radius of the viewshed, defaults to 100.
-        :type radius: float, optional
-        :return: A Polygon representing the viewshed triangle.
-        :rtype: shapely.geometry.Polygon
-        """
-        
-        
-        # Calculate the left and right angles
-        left_angle = (heading - angle / 2) % 360
-        right_angle = (heading + angle / 2) % 360
-        
-        # Convert angles to radians
-        left_angle_rad = math.radians(left_angle)
-        right_angle_rad = math.radians(right_angle)
-        
-        # Calculate the left and right points of the viewshed triangle
-        left_point = Point(self.geometry.x + radius * math.sin(left_angle_rad), 
-                           self.geometry.y + radius * math.cos(left_angle_rad))
-        right_point = Point(self.geometry.x + radius * math.sin(right_angle_rad), 
-                            self.geometry.y + radius * math.cos(right_angle_rad))
-        
-        # Create the viewshed triangle polygon
-        viewshed = Polygon([self.geometry, left_point, right_point])
-    
-        return viewshed
-    
     def get_agents_in_viewshed(self, agents):
         """
         Get the agents that are within the viewshed of the current agent.
@@ -120,23 +84,6 @@ class Resident(mg.GeoAgent):
         agents_in_viewshed = [agent for agent in agents if agent.geometry.within(viewshed)]
         
         return agents_in_viewshed
-    
-    # def get_nearest_agent(self, agents):
-    #     """
-    #     Get the nearest agent from a GeoDataFrame of agents using spatial index.
-    #     :param agents: A GeoDataFrame of agents.
-    #     :type agents: GeoDataFrame
-    #     :return: A GeoSeries containing the nearest agent.
-    #     :rtype: GeoSeries
-    #     """
-        
-    #     # Use spatial index to find the nearest agent
-    #     nearest_idx = agents.sindex.nearest(self.geometry, max_distance=100)[0,0]
-        
-    #     # Return the nearest agent as a GeoSeries
-    #     nearest_agent = agents.iloc[nearest_idx]
-        
-    #     return nearest_agent
 
     def get_nearest_agent(self, agents):
         """
@@ -221,26 +168,6 @@ class Resident(mg.GeoAgent):
         # Agent start evacuating after the decision time has passed and there is still distance to destination
         elif (self.distance_to_dest > 0) and (self.model.time_elapsed >= self.decision_time):
             self.status = "evacuating"
-
-            # Find the nearest agent in viewshed
-            # TODO: performance issue
-            # Legacy code
-            # residents = self.model.agents_by_type[Resident].get(["unique_id", "status", "geometry"])
-            # residents_df = pd.DataFrame(residents, columns=["unique_id","status", "geometry"])
-            # residents_df = residents_df[residents_df["status"] == "evacuating"]
-            # residents_gdf = GeoDataFrame(residents_df, geometry="geometry", crs=self.crs)
-            # residents_sindex = residents_gdf.sindex
-
-            # agents_in_viewshed = residents_gdf.iloc[residents_sindex.intersection(self.viewshed.bounds)]
-            # if agents_in_viewshed.shape[0] > 0:
-            #     nearest_agent = self.get_nearest_agent(agents_in_viewshed)
-            #     if nearest_agent.unique_id == self.unique_id:
-            #         nearest_agent = None
-            #     else:
-            #         # Convert nearest_agent to Resident type, there is a bug here TODO
-            #         nearest_agent = self.model.agents_by_type[Resident][nearest_agent.unique_id - 4]
-            # else:
-            #     nearest_agent = None
 
             # Use GeoSpace native search, the source code uses rtree.
             neighbors_agents = self.model.space.get_neighbors_within_distance(self, 45) # it also gets the agent itself, we will filter it out later
