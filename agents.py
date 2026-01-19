@@ -3,14 +3,10 @@ from pyproj import Transformer
 import rasterio
 import shapely
 from shapely.geometry import Point, LineString, Polygon
-from road_network import RoadNetwork
 import networkx as nx
 import geopandas as gpd
 import math
 from traffic import GMModel, GMModelLegacy
-from geopandas import GeoDataFrame, GeoSeries
-import pandas as pd
-import dask_geopandas as dgpd
 import numpy as np
 
 class Resident(mg.GeoAgent):
@@ -126,22 +122,55 @@ class Resident(mg.GeoAgent):
         
         return agents_in_viewshed
     
+    # def get_nearest_agent(self, agents):
+    #     """
+    #     Get the nearest agent from a GeoDataFrame of agents using spatial index.
+    #     :param agents: A GeoDataFrame of agents.
+    #     :type agents: GeoDataFrame
+    #     :return: A GeoSeries containing the nearest agent.
+    #     :rtype: GeoSeries
+    #     """
+        
+    #     # Use spatial index to find the nearest agent
+    #     nearest_idx = agents.sindex.nearest(self.geometry, max_distance=100)[0,0]
+        
+    #     # Return the nearest agent as a GeoSeries
+    #     nearest_agent = agents.iloc[nearest_idx]
+        
+    #     return nearest_agent
+
     def get_nearest_agent(self, agents):
         """
-        Get the nearest agent from a GeoDataFrame of agents using spatial index.
-        :param agents: A GeoDataFrame of agents.
-        :type agents: GeoDataFrame
-        :return: A GeoSeries containing the nearest agent.
-        :rtype: GeoSeries
+        Get the nearest agent from a list of agents.
+        :param agents: A list of agents.
+        :type agents: list
+        :return: The nearest agent.
+        :rtype: Agent
         """
         
-        # Use spatial index to find the nearest agent
-        nearest_idx = agents.sindex.nearest(self.geometry, max_distance=100)[0,0]
+        min_distance = float('inf')
+        nearest_agent = None
         
-        # Return the nearest agent as a GeoSeries
-        nearest_agent = agents.iloc[nearest_idx]
+        for agent in agents:
+            distance = self.model.space.distance(self, agent)
+            if distance < min_distance:
+                min_distance = distance
+                nearest_agent = agent
         
         return nearest_agent
+    
+    def get_fov_agents(self, agents, angle=20):
+        """
+        Calculate the vectors from self to each agent, and only keep agents within certian angle of heading.
+        """
+        fov_agents = []
+        for agent in agents:
+            vector_to_agent = (agent.geometry.x - self.geometry.x, agent.geometry.y - self.geometry.y)
+            angle_to_agent = math.degrees(math.atan2(vector_to_agent[0], vector_to_agent[1]))
+            angle_diff = (angle_to_agent - self.heading + 360) % 360
+            if angle_diff <= angle / 2 or angle_diff >= 360 - angle / 2:
+                fov_agents.append(agent)
+        return fov_agents
 
     def choose_shelter(self):
         # Choose the nearest shelter based on the shortest path
@@ -179,24 +208,30 @@ class Resident(mg.GeoAgent):
 
             # Find the nearest agent in viewshed
             # TODO: performance issue
-            # agents_in_viewshed = self.get_agents_in_viewshed(self.model.agents_by_type[Resident])
-            residents = self.model.agents_by_type[Resident].get(["unique_id", "status", "geometry"])
-            residents_df = pd.DataFrame(residents, columns=["unique_id","status", "geometry"])
-            residents_df = residents_df[residents_df["status"] == "evacuating"]
-            residents_gdf = GeoDataFrame(residents_df, geometry="geometry", crs=self.crs)
-            residents_sindex = residents_gdf.sindex
-            # viewshed_gdf = GeoDataFrame(geometry=[self.viewshed], crs=self.crs)
-            # Get the agents in the viewshed
-            # agents_in_viewshed = gpd.sjoin(residents_gdf, viewshed_gdf, predicate="within", how="inner")
-            agents_in_viewshed = residents_gdf.iloc[residents_sindex.intersection(self.viewshed.bounds)]
-            if agents_in_viewshed.shape[0] > 0:
-                nearest_agent = self.get_nearest_agent(agents_in_viewshed)
-                if nearest_agent.unique_id == self.unique_id:
-                    nearest_agent = None
-                else:
-                    # Convert nearest_agent to Resident type, there is a bug here TODO
-                    nearest_agent = self.model.agents_by_type[Resident][nearest_agent.unique_id - 4]
-                    # nearest_agent = next(agent for agent in self.model.agents_by_type[Resident] if agent.unique_id == nearest_agent.unique_id)
+            # Legacy code
+            # residents = self.model.agents_by_type[Resident].get(["unique_id", "status", "geometry"])
+            # residents_df = pd.DataFrame(residents, columns=["unique_id","status", "geometry"])
+            # residents_df = residents_df[residents_df["status"] == "evacuating"]
+            # residents_gdf = GeoDataFrame(residents_df, geometry="geometry", crs=self.crs)
+            # residents_sindex = residents_gdf.sindex
+
+            # agents_in_viewshed = residents_gdf.iloc[residents_sindex.intersection(self.viewshed.bounds)]
+            # if agents_in_viewshed.shape[0] > 0:
+            #     nearest_agent = self.get_nearest_agent(agents_in_viewshed)
+            #     if nearest_agent.unique_id == self.unique_id:
+            #         nearest_agent = None
+            #     else:
+            #         # Convert nearest_agent to Resident type, there is a bug here TODO
+            #         nearest_agent = self.model.agents_by_type[Resident][nearest_agent.unique_id - 4]
+            # else:
+            #     nearest_agent = None
+
+            # Use GeoSpace native search, the source code uses rtree.
+            neighbors_agents = self.model.space.get_neighbors_within_distance(self, 100) # it also gets the agent itself, we will filter it out later
+            neighbors_residents = [agent for agent in neighbors_agents if isinstance(agent, Resident) and agent.unique_id != self.unique_id]
+            neighbors_resident_in_fov = self.get_fov_agents(neighbors_residents, angle=20)
+            if len(neighbors_resident_in_fov) > 0:
+                nearest_agent = self.get_nearest_agent(neighbors_resident_in_fov)
             else:
                 nearest_agent = None
 
@@ -219,7 +254,7 @@ class Resident(mg.GeoAgent):
 
             # Update the heading
             self.heading = self.calculate_heading(current_point, next_point)
-            self.viewshed = self.calculate_viewshed(self.heading)
+            # self.viewshed = self.calculate_viewshed(self.heading)
 
             # Update the distance to destination
             self.distance_to_dest -= distance_to_travel

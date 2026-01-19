@@ -45,6 +45,10 @@ class EvacuationModel(mesa.Model):
     shelters_gdf = gpd.read_file(shelters_shp)
     road_network_gdf = gpd.read_file(road_network_shp)
 
+    # duplicate population_distribution_gdf to create more agents
+    population_distribution_gdf = pd.concat([population_distribution_gdf]*10, ignore_index=True)
+
+
     def __init__(
         self, 
         num_steps=100, 
@@ -177,11 +181,11 @@ def get_evacuation_time(model):
     return pd.Series(evacuation_time).replace(np.inf, np.nan).dropna().tolist()
 
 def demo():
-    model = EvacuationModel()
+    model = EvacuationModel(num_residents=5000, Rtau=0)
     for i in range(3600):
         model.step()
         print(model.steps, model.n_evacuated, model.n_dead)
-        print(get_evacuation_time(model))
+        # print(get_evacuation_time(model))
 
 def simualtion():
 
@@ -216,5 +220,5 @@ def simualtion():
     df.to_csv("siumlation_results.csv", index=False)
 
 if __name__ == "__main__":
-    # demo()
-    simualtion()
+    demo()
+    # simualtion()
