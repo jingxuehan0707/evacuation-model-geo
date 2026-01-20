@@ -16,11 +16,6 @@ import pandas as pd
 
 class EvacuationModel(mesa.Model):
 
-    # The shapefile path, in wgs84
-    # population_distribution_shp = "data/gcs/population_distribution.shp"
-    # shelters_shp = "data/gcs/shelters.shp"
-    # road_network_shp = "data/gcs/road_network.shp"
-
     # The shapefile path, in WGS_1984_UTM_Zone_11N, epsg:32611
     population_distribution_shp = "data/pcs/population_distribution.shp"
     shelters_shp = "data/pcs/shelters.shp"
@@ -29,25 +24,14 @@ class EvacuationModel(mesa.Model):
     # The hazard raster path
     hazard_raster = "data/pcs/fire_arrival_time.asc"
     hazard_raster_translated = "data/pcs/fire_arrival_time_translated.asc"
-
-    # Create a new raster with affine transform (-100, 0)
-    # with rio.open(hazard_raster) as src:
-    #     data = src.read(1)
-    #     transform = src.transform * Affine.translation(-20, 20)
-    #     meta = src.meta.copy()
-    #     meta.update({"transform": transform})
-        
-    #     with rio.open(hazard_raster_translated, 'w', **meta) as dst:
-    #         dst.write(data, 1)
-        
+    
     # Create gdf for the shapefile
     population_distribution_gdf = gpd.read_file(population_distribution_shp)
     shelters_gdf = gpd.read_file(shelters_shp)
     road_network_gdf = gpd.read_file(road_network_shp)
 
-    # duplicate population_distribution_gdf to create more agents
-    # population_distribution_gdf = pd.concat([population_distribution_gdf]*10, ignore_index=True)
-
+    # Get CRS
+    crs = population_distribution_gdf.crs
 
     def __init__(
         self, 
@@ -61,7 +45,7 @@ class EvacuationModel(mesa.Model):
         Rsig=1.65
     ):
         super().__init__()
-        self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
+        self.space = StudyArea(crs=self.crs ,warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.steps = 0
         self.step_interval = 1 # How many seconds each step represents
