@@ -1,12 +1,11 @@
 import mesa_geo as mg
-from pyproj import Transformer
 import rasterio
 import shapely
-from shapely.geometry import Point, LineString, Polygon
+from shapely.geometry import Point, LineString
 import networkx as nx
 import geopandas as gpd
 import math
-from traffic import GMModel, GMModelLegacy
+from traffic import GMModelLegacy
 import numpy as np
 
 class Resident(mg.GeoAgent):
@@ -40,9 +39,6 @@ class Resident(mg.GeoAgent):
         self.heading = self.calculate_heading(
             self.geometry, Point(self.origin[0], self.origin[1])
         )
-        
-        # Calculate the initial viewshed based on the heading
-        self.viewshed = self.calculate_viewshed(self.heading)
 
     def calculate_heading(self, from_point: Point, to_point: Point):
         """
@@ -176,7 +172,8 @@ class Resident(mg.GeoAgent):
             if len(neighbors_resident_in_fov) > 0:
                 nearest_agent = self.get_nearest_agent(neighbors_resident_in_fov)
                 if nearest_agent:
-                    print(f"Agent {self.unique_id} found nearest agent {nearest_agent.unique_id} in FOV")
+                    # print(f"Agent {self.unique_id} found nearest agent {nearest_agent.unique_id} in FOV")
+                    pass
             else:
                 nearest_agent = None
 
