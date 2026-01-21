@@ -18,12 +18,15 @@ class Resident(mg.GeoAgent):
         self.destination = ()  # Placeholder for a test shelter location
         self.shelters = self.model.agents_by_type[Shelter]
         self.path = LineString()
+        self.path_to_orgin = LineString()
         self.speed = 0  # Speed in m/s
         self.heading = 0  # Heading in degrees (north=0, east=90, south=180, west=270)
-        self.mode = "drive"  # Travel mode
+        self.mode = "walk"  # Travel mode [walk, drive]
         self.decision_time = 0  # Decision-making time in seconds
         self.distance_to_dest = 0  # Distance to destination
+        self.distance_to_origin = 0 # Distance to origin, agent needs to walk to origin first
         self.status = "waiting"  # Possible statuses: "waiting", "evacuating", "evacuated", "dead"
+        self.neighbors_ids = ""  # List of neighboring agent IDs
 
         # Choose the nearest shelter and calculate the path
         self.choose_shelter()
@@ -117,6 +120,8 @@ class Resident(mg.GeoAgent):
             self.destination = (nearest_shelter.geometry.x, nearest_shelter.geometry.y)
             self.path = nearest_shelter_path
             self.distance_to_dest = nearest_shelter_path.length
+            self.path_to_origin = LineString([self.geometry, Point(self.origin[0], self.origin[1])])
+            self.distance_to_origin = self.path_to_origin.length
         else: # If no shelter is reachable, set destination to None and path to empty
             # print(f"Agent {self.unique_id} could not find a path to any shelter.")
             self.destination = None
@@ -143,19 +148,41 @@ class Resident(mg.GeoAgent):
         if self.model.time_elapsed < self.decision_time:
             self.status = "waiting"
 
+        # Agent walks to orgin first
+        elif (self.distance_to_origin > 0) and (self.model.time_elapsed >= self.decision_time):
+            print(f"Agent {self.unique_id} is walking to origin.")
+            self.speed = self.model.ped_speed / self.model.meter_to_feet  # convert to m/s
+
+            # Calculate the distance to travel in this step
+            distance_to_travel = self.speed * self.model.step_interval
+            
+            # Calculate the next point based on the distance to travel
+            current_point = self.geometry
+            next_point = self.path_to_origin.interpolate(self.path_to_origin.project(current_point) + distance_to_travel)
+            if next_point is None:
+                # TODO, minor bug here. For some reason, we can't get the next point.
+                next_point = current_point
+            
+            # Update the geomety
+            self.geometry = Point(next_point.x, next_point.y)
+
+            # Update the distance to origin
+            self.distance_to_origin -= distance_to_travel
+
         # Agent start evacuating after the decision time has passed and there is still distance to destination
         elif (self.distance_to_dest > 0) and (self.model.time_elapsed >= self.decision_time):
             self.status = "evacuating"
 
             # Use GeoSpace native search, the source code uses rtree.
             neighbors_agents = self.model.space.get_neighbors_within_distance(self, 45) # it also gets the agent itself, we will filter it out later
+            self.neighbors_ids = ",".join([str(agent.unique_id) for agent in neighbors_agents])
             neighbors_residents = [agent for agent in neighbors_agents if isinstance(agent, Resident) and agent.unique_id != self.unique_id]
             neighbors_resident_in_fov = self.get_fov_agents(neighbors_residents, angle=20)
             if len(neighbors_resident_in_fov) > 0:
                 nearest_agent = self.get_nearest_agent(neighbors_resident_in_fov)
                 if nearest_agent:
-                    # print(f"Agent {self.unique_id} found nearest agent {nearest_agent.unique_id} in FOV")
-                    pass
+                    print(f"Agent {self.unique_id} found nearest agent {nearest_agent.unique_id} in FOV")
+                    # pass
             else:
                 nearest_agent = None
 
@@ -163,8 +190,8 @@ class Resident(mg.GeoAgent):
             gm_model = GMModelLegacy(self.model, nearest_agent, self)
             self.speed = gm_model.update_speed()
 
-            # Calculate the distance to travel in this step (speed in km/h, step_interval in seconds)
-            distance_to_travel = self.speed * self.model.step_interval  # convert speed to m/s
+            # Calculate the distance to travel in this step
+            distance_to_travel = self.speed * self.model.step_interval
             
             # Calculate the next point based on the distance to travel
             current_point = self.geometry

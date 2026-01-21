@@ -31,7 +31,8 @@ class EvacuationModel(mesa.Model):
     road_network_gdf = gpd.read_file(road_network_shp)
 
     # Get CRS
-    crs = population_distribution_gdf.crs
+    crs = population_distribution_gdf.crs.to_string()
+    print(type(crs))
 
     def __init__(
         self, 
@@ -56,7 +57,15 @@ class EvacuationModel(mesa.Model):
         self.num_steps = num_steps
         self.num_residents = num_residents
 
-        # Driving parameters
+        # Coversion factors
+        # The model parameters uses imperial units iin consistency with Ali's paper. However we will convert
+        # the units to metric system when performing spatial analysis with geopandas and rasterio.
+        self.meter_to_feet = 3.28084 # 1 meter = 3.28084 feet
+
+        # Pedestrian parameters
+        self.ped_speed = 4.0 # ft/s
+
+        # Car parameters
         self.max_speed = float(max_speed) # mph
         self.acceleration = float(acceleration) # ft/s^2
         self.deceleration = float(deceleration) # ft/s^2
@@ -73,7 +82,7 @@ class EvacuationModel(mesa.Model):
 
         # Build shortest path cache
         # self.population_distribution_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
-        self.population_distribution_gdf = self.population_distribution_gdf.iloc[:self.num_residents]
+        self.population_distribution_gdf = self.population_distribution_gdf.iloc[1000:2000]
         start_points_gdf = self.population_distribution_gdf
         start_points = [Point(xy) for xy in zip(start_points_gdf.geometry.x, start_points_gdf.geometry.y)]
         end_points_gdf = self.shelters_gdf
@@ -169,12 +178,13 @@ def get_evacuation_time(model):
 
 def demo():
     model = EvacuationModel(num_residents=2451, Rtau=0, Rsig=0)
-    for i in range(300):
+    for i in range(30):
         model.step()
         print(model.steps, model.n_evacuated, model.n_dead)
         # print(get_evacuation_time(model))
     gdf = model.space.get_agents_as_GeoDataFrame(agent_cls=Resident)
-    gdf.to_file("debug/residents_output.shp")
+    print(gdf.crs)
+    gdf.to_file(f"debug/residents_output.shp")
 
 def simualtion():
 
