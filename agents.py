@@ -18,13 +18,14 @@ class Resident(mg.GeoAgent):
         self.destination = ()  # Placeholder for a test shelter location
         self.shelters = self.model.agents_by_type[Shelter]
         self.path = LineString()
-        self.path_to_orgin = LineString()
+        self.path_to_origin = LineString()
         self.speed = 0  # Speed in m/s
         self.heading = 0  # Heading in degrees (north=0, east=90, south=180, west=270)
         self.mode = "walk"  # Travel mode [walk, drive]
         self.decision_time = 0  # Decision-making time in seconds
         self.distance_to_dest = 0  # Distance to destination
         self.distance_to_origin = 0 # Distance to origin, agent needs to walk to origin first
+        self.next_point = self.geometry  # Next point along the path
         self.status = "waiting"  # Possible statuses: "waiting", "evacuating", "evacuated", "dead"
         self.neighbors_ids = ""  # List of neighboring agent IDs
 
@@ -132,6 +133,10 @@ class Resident(mg.GeoAgent):
         """Update the speed using the sin wave between 0 - 25, every 10 steps"""
         self.speed = 1 * abs(math.sin(self.model.steps / 10))
 
+    def move_to_next_point(self):
+        """Update the geometry to the next point."""
+        self.geometry = self.next_point
+
     def step(self):
 
         # Check if the agent is in the fire hazard area
@@ -150,7 +155,6 @@ class Resident(mg.GeoAgent):
 
         # Agent walks to orgin first
         elif (self.distance_to_origin > 0) and (self.model.time_elapsed >= self.decision_time):
-            print(f"Agent {self.unique_id} is walking to origin.")
             self.speed = self.model.ped_speed / self.model.meter_to_feet  # convert to m/s
 
             # Calculate the distance to travel in this step
@@ -161,10 +165,10 @@ class Resident(mg.GeoAgent):
             next_point = self.path_to_origin.interpolate(self.path_to_origin.project(current_point) + distance_to_travel)
             if next_point is None:
                 # TODO, minor bug here. For some reason, we can't get the next point.
-                next_point = current_point
+                self.next_point = current_point
             
             # Update the geomety
-            self.geometry = Point(next_point.x, next_point.y)
+            self.next_point = Point(next_point.x, next_point.y)
 
             # Update the distance to origin
             self.distance_to_origin -= distance_to_travel
@@ -172,17 +176,18 @@ class Resident(mg.GeoAgent):
         # Agent start evacuating after the decision time has passed and there is still distance to destination
         elif (self.distance_to_dest > 0) and (self.model.time_elapsed >= self.decision_time):
             self.status = "evacuating"
+            self.mode = "drive"
 
             # Use GeoSpace native search, the source code uses rtree.
-            neighbors_agents = self.model.space.get_neighbors_within_distance(self, 45) # it also gets the agent itself, we will filter it out later
+            neighbors_agents = list(self.model.space.get_neighbors_within_distance(self, distance=20)) # it also gets the agent itself, we will filter it out later
             self.neighbors_ids = ",".join([str(agent.unique_id) for agent in neighbors_agents])
             neighbors_residents = [agent for agent in neighbors_agents if isinstance(agent, Resident) and agent.unique_id != self.unique_id]
             neighbors_resident_in_fov = self.get_fov_agents(neighbors_residents, angle=20)
             if len(neighbors_resident_in_fov) > 0:
                 nearest_agent = self.get_nearest_agent(neighbors_resident_in_fov)
                 if nearest_agent:
-                    print(f"Agent {self.unique_id} found nearest agent {nearest_agent.unique_id} in FOV")
-                    # pass
+                    # print(f"Agent {self.unique_id} found nearest agent {nearest_agent.unique_id} in FOV")
+                    pass
             else:
                 nearest_agent = None
 
@@ -198,10 +203,10 @@ class Resident(mg.GeoAgent):
             next_point = self.path.interpolate(self.path.project(current_point) + distance_to_travel)
             if next_point is None:
                 # TODO, minor bug here. For some reason, we can't get the next point.
-                next_point = current_point
+                self.next_point = current_point
             
-            # Update the geomety
-            self.geometry = Point(next_point.x, next_point.y)
+            # Update the next point, however we will update geometry after we finish processing all other agents to avoid interference.
+            self.next_point = Point(next_point.x, next_point.y)
 
             # Update the heading
             self.heading = self.calculate_heading(current_point, next_point)

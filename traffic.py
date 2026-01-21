@@ -15,7 +15,6 @@ class GMModelLegacy:
         if self.car_ahead:
             space_hw = self.car_follow.geometry.distance(self.car_ahead.geometry)  # Space headway
             speed_diff = self.car_ahead.speed - self.car_follow.speed  # Speed difference
-            print(f"Space headway: {space_hw}, Speed difference: {speed_diff}, car_follow_id: {self.car_follow.unique_id}, car_ahead_id: {self.car_ahead.unique_id}")
             
             if space_hw < self.space_hw_threshold:
                 updated_speed = 0  # Stop if too close

@@ -31,8 +31,7 @@ class EvacuationModel(mesa.Model):
     road_network_gdf = gpd.read_file(road_network_shp)
 
     # Get CRS
-    crs = population_distribution_gdf.crs.to_string()
-    print(type(crs))
+    crs = population_distribution_gdf.crs
 
     def __init__(
         self, 
@@ -146,6 +145,10 @@ class EvacuationModel(mesa.Model):
         self.agents_by_type[FireHazardCell].do("step")
         self.agents_by_type[FireHazard].do("step")
         self.agents_by_type[Resident].do("step")
+        self.agents_by_type[Resident].do("move_to_next_point")
+
+        # Recreate R-tree for spatial queries after agents have moved
+        self.space._recreate_rtree()
 
         # Collect data
         self.n_dead = self.get_statistics().get("dead", 0)
@@ -178,12 +181,11 @@ def get_evacuation_time(model):
 
 def demo():
     model = EvacuationModel(num_residents=2451, Rtau=0, Rsig=0)
-    for i in range(30):
+    for i in range(3600):
         model.step()
         print(model.steps, model.n_evacuated, model.n_dead)
         # print(get_evacuation_time(model))
     gdf = model.space.get_agents_as_GeoDataFrame(agent_cls=Resident)
-    print(gdf.crs)
     gdf.to_file(f"debug/residents_output.shp")
 
 def simualtion():
