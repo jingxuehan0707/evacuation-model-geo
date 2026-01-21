@@ -20,7 +20,6 @@ class Resident(mg.GeoAgent):
         self.path = LineString()
         self.speed = 0  # Speed in m/s
         self.heading = 0  # Heading in degrees (north=0, east=90, south=180, west=270)
-        self.viewshed = None
         self.mode = "drive"  # Travel mode
         self.decision_time = 0  # Decision-making time in seconds
         self.distance_to_dest = 0  # Distance to destination
@@ -63,23 +62,6 @@ class Resident(mg.GeoAgent):
         heading = (heading + 360) % 360
         
         return heading
-    
-    def get_agents_in_viewshed(self, agents):
-        """
-        Get the agents that are within the viewshed of the current agent.
-        :param agents: A list of agents to check.
-        :type agents: list
-        :return: A list of agents that are within the viewshed.
-        :rtype: list
-        """
-        
-        # Calculate the viewshed triangle
-        viewshed = self.calculate_viewshed(self.heading)
-        
-        # Get the agents that are within the viewshed
-        agents_in_viewshed = [agent for agent in agents if agent.geometry.within(viewshed)]
-        
-        return agents_in_viewshed
 
     def get_nearest_agent(self, agents):
         """
