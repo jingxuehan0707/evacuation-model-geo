@@ -14,7 +14,7 @@ import solara
 
 model_params = {
     "num_steps": Slider("Number of steps", 1000, 10, 1000, 1),
-    "num_residents": Slider("Number of residents", 100, 10, 2000, 1),
+    "num_residents": Slider("Number of residents", 500, 10, 2000, 1),
     "max_speed": {
         "type": "InputText",
         "value": 35,
@@ -37,12 +37,12 @@ model_params = {
     },
     "Rtau": {
         "type": "InputText",
-        "value": 10,
+        "value": 0,
         "label": "Milling Time (min)",
     },
     "Rsig": {
         "type": "InputText",
-        "value": 1.65,
+        "value": 0,
         "label": "Scale Factor Parameter",
     },
 }
@@ -121,7 +121,7 @@ def map_to_red_gradient(cell_values, min_value=0, max_value=120):
 
 def display_txt(model):
     minutes, seconds = divmod(model.time_elapsed, 60)
-    return solara.Markdown(f"**Time Elapsed:** {int(minutes):02d}:{int(seconds):02d} <br >**Evacuated:** {model.n_evacuated} **Casuality:** {model.n_dead} <br> **Percentage of Evacuated:** {model.n_evacuated / model.num_residents:.2%} <br> **Percentage of Casuality:** {model.n_dead / model.num_residents:.2%}")
+    return solara.Markdown(f"**Time Elapsed:** {int(minutes):02d}:{int(seconds):02d} <br>**Steps:** {model.steps} <br>**Evacuated:** {model.n_evacuated} **Casuality:** {model.n_dead} <br> **Percentage of Evacuated:** {model.n_evacuated / model.num_residents:.2%} <br> **Percentage of Casuality:** {model.n_dead / model.num_residents:.2%}")
 
 def post_process_line_plot(ax):
     """

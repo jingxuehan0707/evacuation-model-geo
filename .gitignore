@@ -8,3 +8,6 @@
 /qgis
 /debug
 profile.pyspy
+/test
+test/__pycache__
+.pytest_cache

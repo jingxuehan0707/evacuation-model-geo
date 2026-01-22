@@ -16,11 +16,6 @@ import pandas as pd
 
 class EvacuationModel(mesa.Model):
 
-    # The shapefile path, in wgs84
-    # population_distribution_shp = "data/gcs/population_distribution.shp"
-    # shelters_shp = "data/gcs/shelters.shp"
-    # road_network_shp = "data/gcs/road_network.shp"
-
     # The shapefile path, in WGS_1984_UTM_Zone_11N, epsg:32611
     population_distribution_shp = "data/pcs/population_distribution.shp"
     shelters_shp = "data/pcs/shelters.shp"
@@ -29,21 +24,14 @@ class EvacuationModel(mesa.Model):
     # The hazard raster path
     hazard_raster = "data/pcs/fire_arrival_time.asc"
     hazard_raster_translated = "data/pcs/fire_arrival_time_translated.asc"
-
-    # Create a new raster with affine transform (-100, 0)
-    # with rio.open(hazard_raster) as src:
-    #     data = src.read(1)
-    #     transform = src.transform * Affine.translation(-20, 20)
-    #     meta = src.meta.copy()
-    #     meta.update({"transform": transform})
-        
-    #     with rio.open(hazard_raster_translated, 'w', **meta) as dst:
-    #         dst.write(data, 1)
-        
+    
     # Create gdf for the shapefile
     population_distribution_gdf = gpd.read_file(population_distribution_shp)
     shelters_gdf = gpd.read_file(shelters_shp)
     road_network_gdf = gpd.read_file(road_network_shp)
+
+    # Get CRS
+    crs = population_distribution_gdf.crs
 
     def __init__(
         self, 
@@ -57,7 +45,7 @@ class EvacuationModel(mesa.Model):
         Rsig=1.65
     ):
         super().__init__()
-        self.space = StudyArea(crs="EPSG:32611",warn_crs_conversion=True)
+        self.space = StudyArea(crs=self.crs ,warn_crs_conversion=True)
         self.road_network = RoadNetwork(geo_series=self.road_network_gdf['geometry'], use_cache=True)
         self.steps = 0
         self.step_interval = 1 # How many seconds each step represents
@@ -68,7 +56,15 @@ class EvacuationModel(mesa.Model):
         self.num_steps = num_steps
         self.num_residents = num_residents
 
-        # Driving parameters
+        # Coversion factors
+        # The model parameters uses imperial units iin consistency with Ali's paper. However we will convert
+        # the units to metric system when performing spatial analysis with geopandas and rasterio.
+        self.meter_to_feet = 3.28084 # 1 meter = 3.28084 feet
+
+        # Pedestrian parameters
+        self.ped_speed = 4.0 # ft/s
+
+        # Car parameters
         self.max_speed = float(max_speed) # mph
         self.acceleration = float(acceleration) # ft/s^2
         self.deceleration = float(deceleration) # ft/s^2
@@ -84,7 +80,9 @@ class EvacuationModel(mesa.Model):
         self.evacuation_time_list = []
 
         # Build shortest path cache
-        start_points_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
+        # self.population_distribution_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
+        self.population_distribution_gdf = self.population_distribution_gdf.iloc[1000:2000]
+        start_points_gdf = self.population_distribution_gdf
         start_points = [Point(xy) for xy in zip(start_points_gdf.geometry.x, start_points_gdf.geometry.y)]
         end_points_gdf = self.shelters_gdf
         end_points = [Point(xy) for xy in zip(end_points_gdf.geometry.x, end_points_gdf.geometry.y)]
@@ -96,7 +94,8 @@ class EvacuationModel(mesa.Model):
         self.space.add_agents(shelter_agents)
 
         resident_ag_creator = mg.AgentCreator(Resident, model=self)
-        resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf.sample(n=self.num_residents))
+        # resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf.sample(n=self.num_residents))
+        resident_agents = resident_ag_creator.from_GeoDataFrame(self.population_distribution_gdf)
         self.space.add_agents(resident_agents)
 
         # Create fire hazard cells
@@ -146,6 +145,10 @@ class EvacuationModel(mesa.Model):
         self.agents_by_type[FireHazardCell].do("step")
         self.agents_by_type[FireHazard].do("step")
         self.agents_by_type[Resident].do("step")
+        self.agents_by_type[Resident].do("move_to_next_point")
+
+        # Recreate R-tree for spatial queries after agents have moved
+        self.space._recreate_rtree()
 
         # Collect data
         self.n_dead = self.get_statistics().get("dead", 0)
@@ -177,11 +180,13 @@ def get_evacuation_time(model):
     return pd.Series(evacuation_time).replace(np.inf, np.nan).dropna().tolist()
 
 def demo():
-    model = EvacuationModel()
+    model = EvacuationModel(num_residents=2451, Rtau=0, Rsig=0)
     for i in range(3600):
         model.step()
         print(model.steps, model.n_evacuated, model.n_dead)
-        print(get_evacuation_time(model))
+        # print(get_evacuation_time(model))
+    gdf = model.space.get_agents_as_GeoDataFrame(agent_cls=Resident)
+    gdf.to_file(f"debug/residents_output.shp")
 
 def simualtion():
 
@@ -216,5 +221,5 @@ def simualtion():
     df.to_csv("siumlation_results.csv", index=False)
 
 if __name__ == "__main__":
-    # demo()
-    simualtion()
+    demo()
+    # simualtion()
