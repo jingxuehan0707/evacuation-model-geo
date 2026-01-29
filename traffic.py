@@ -1,11 +1,12 @@
 from mesa_geo import GeoAgent
-   
+
+# This code is implemented based on NetLogo move-gm reporter
 class GMModelLegacy:
     def __init__(self, model, car_ahead: GeoAgent, car_follow: GeoAgent):  
         self.car_ahead = car_ahead
         self.car_follow = car_follow
-        self.space_hw_threshold = 6 * model.meter_to_feet # Convert 6 feet to meters
-        self.max_speed = model.max_speed 
+        self.space_hw_threshold = 6 / model.meter_to_feet # Convert 6 feet to meters
+        self.max_speed = (model.max_speed * 5280) / (model.meter_to_feet * 3600)  # Convert mph to m/s
         self.acceleration = model.acceleration
         self.alpha = model.alpha
         self.step_interval = model.step_interval
