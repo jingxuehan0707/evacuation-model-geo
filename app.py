@@ -56,7 +56,7 @@ def draw_agents(agent):
                 "weight": 2,
                 }
             if agent.status == "evacuating":
-                if agent.speed < 15.65: # 15.65 m/s = 35 mph
+                if agent.speed < 15.64: # 15.64 m/s = 35 mph
                     return {
                     "color": "#FFA500",  # Orange
                     "weight": 2,

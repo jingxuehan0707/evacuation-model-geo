@@ -81,7 +81,7 @@ class EvacuationModel(mesa.Model):
 
         # Build shortest path cache
         # self.population_distribution_gdf = self.population_distribution_gdf.sample(n=self.num_residents)
-        self.population_distribution_gdf = self.population_distribution_gdf.iloc[1000:2000]
+        self.population_distribution_gdf = self.population_distribution_gdf.iloc[:self.num_residents]
         start_points_gdf = self.population_distribution_gdf
         start_points = [Point(xy) for xy in zip(start_points_gdf.geometry.x, start_points_gdf.geometry.y)]
         end_points_gdf = self.shelters_gdf
@@ -124,7 +124,6 @@ class EvacuationModel(mesa.Model):
         self.datacollector = mesa.DataCollector(
             model_reporters={
                 "steps": "steps",
-                # "agents evacuated": get_count_agent_evacuated,
                 "Evacuated": "n_evacuated",
                 "Casuality": "n_dead",
                 "Percentage of Casuality": lambda m: m.n_dead / m.num_residents * 100,
@@ -153,23 +152,14 @@ class EvacuationModel(mesa.Model):
         # Collect data
         self.n_dead = self.get_statistics().get("dead", 0)
         self.n_evacuated = self.get_statistics().get("evacuated", 0)
-
         self.datacollector.collect(self)
 
-        # Stop the model if all agents are evacuated
+        # Stop the model if all agents are evacuated and dead
         if self.n_dead + self.n_evacuated < len(self.agents_by_type[Resident]):
             # print("Step: ", self.steps)
             pass
         else:
             self.running = False
-
-def get_count_agent_evacuated(model):
-
-    n = 0
-    for agent in model.agents_by_type[Resident]:
-        if agent.status == "evacuated":
-            n += 1
-    return n
 
 def get_status(model):
     status = model.agents_by_type[Resident].get("status")
@@ -184,7 +174,8 @@ def demo():
     for i in range(3600):
         model.step()
         print(model.steps, model.n_evacuated, model.n_dead)
-        # print(get_evacuation_time(model))
+        if model.running == False:
+            break
     gdf = model.space.get_agents_as_GeoDataFrame(agent_cls=Resident)
     gdf.to_file(f"debug/residents_output.shp")
 
