@@ -35,15 +35,15 @@ model_params = {
         "value": 0.14,
         "label": "Alpha (mi2/hr)",
     },
-    "Rtau": {
+    "Rlogmu": {
         "type": "InputText",
         "value": 0,
-        "label": "Milling Time (min)",
+        "label": "Rlogmu",
     },
-    "Rsig": {
+    "Rlogsigma": {
         "type": "InputText",
         "value": 0,
-        "label": "Scale Factor Parameter",
+        "label": "Rlogsigma",
     },
 }
 

@@ -11,6 +11,7 @@ from rasterio.transform import Affine
 import rasterio.features
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Note: When using mg.AgentCreator, the agents are stored in the self.model
 
@@ -41,8 +42,8 @@ class EvacuationModel(mesa.Model):
         acceleration=5, 
         deceleration=25, 
         alpha=0.14, 
-        Rtau=45, 
-        Rsig=1.65
+        Rlogmu=3.828, 
+        Rlogsigma=0.614
     ):
         super().__init__()
         self.space = StudyArea(crs=self.crs ,warn_crs_conversion=True)
@@ -71,8 +72,10 @@ class EvacuationModel(mesa.Model):
         self.alpha = float(alpha) # mile^2/hr
 
         # Decision making time parameter
-        self.Rtau = float(Rtau) # The milling time in minutes, the time it takes for a resident to receive the notification
-        self.Rsig = float(Rsig) # The scale factor parameter
+        # self.Rtau = float(Rtau) # The milling time in minutes, the time it takes for a resident to receive the notification
+        # self.Rsig = float(Rsig) # The scale factor parameter
+        self.Rlogmu = float(Rlogmu) # The mean of the log-normal distribution
+        self.Rlogsigma = float(Rlogsigma) # The standard deviation of the log-normal distribution
 
         # Statistics
         self.n_evacuated = 0
@@ -128,7 +131,7 @@ class EvacuationModel(mesa.Model):
                 "Casuality": "n_dead",
                 "Percentage of Casuality": lambda m: m.n_dead / m.num_residents * 100,
                 "Percentage of Evacuated": lambda m: m.n_evacuated / m.num_residents * 100,
-                "Evacuation Time": lambda m: m.evacuation_time_list,
+                # "Evacuation Time": lambda m: m.evacuation_time_list,
             }
         )
         self.datacollector.collect(self)
@@ -170,14 +173,28 @@ def get_evacuation_time(model):
     return pd.Series(evacuation_time).replace(np.inf, np.nan).dropna().tolist()
 
 def demo():
-    model = EvacuationModel(num_residents=2451, Rtau=0, Rsig=0)
+    model = EvacuationModel(num_residents=2451, Rlogmu=3.828, Rlogsigma=0.614)
     for i in range(3600):
         model.step()
         print(model.steps, model.n_evacuated, model.n_dead)
         if model.running == False:
             break
-    gdf = model.space.get_agents_as_GeoDataFrame(agent_cls=Resident)
-    gdf.to_file(f"debug/residents_output.shp")
+
+    # Get agent as gdf for debugging    
+    # gdf = model.space.get_agents_as_GeoDataFrame(agent_cls=Resident)
+    # gdf.to_file(f"debug/residents_output.shp")
+
+    # Get model reporter for plotting
+    model_metrics_df = model.datacollector.get_model_vars_dataframe()
+    model_metrics_df.to_csv(f"debug/model_metrics.csv")
+    # Plot percent of evaucated by step, we first need convert "Step" to minutes
+    model_metrics_df["step"] = model_metrics_df["steps"] / 60
+    plt.plot(model_metrics_df["step"], model_metrics_df["Percentage of Evacuated"])
+    plt.xlabel("Time (minutes)")
+    plt.ylabel("Percentage of Evacuated (%)")
+    plt.title("Percentage of Evacuated over Time")
+    plt.savefig(f"debug/percentage_of_evacuated.png")
+    plt.close()
 
 def simualtion():
 

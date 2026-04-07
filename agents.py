@@ -45,7 +45,10 @@ class Resident(mg.GeoAgent):
             self.distance_over_segment = self.path_metadata[self.seg_idx][2]
 
         # Calculate the decision-making time using a Rayleigh distribution
-        self.decision_time = (np.random.rayleigh(self.model.Rsig) + self.model.Rtau) * 60
+        # self.decision_time = (np.random.rayleigh(self.model.Rsig) + self.model.Rtau) * 60
+
+        # Calculate the decision-making time using a log-normal distribution
+        self.decision_time = np.random.lognormal(self.model.Rlogmu, self.model.Rlogsigma) * 60
 
         # Initialize evacuation time (infinity until evacuation is complete)
         self.evacuation_time = np.inf
